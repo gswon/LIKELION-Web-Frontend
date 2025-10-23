@@ -46,34 +46,36 @@ export default function LikeLionNYU() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="flex items-center justify-between px-8 py-4 border-b">
-        <div className="text-xl font-bold">LikeLion x NYU</div>
+      <nav className="flex items-center w-full px-[32px] py-[16px] bg-white">
+        <div className="flex text-[32px] font-bold">
+          LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
+        </div>
         
-        <div className="flex items-center gap-6 bg-white border border-gray-300 rounded-full px-8 py-2">
-          <a href="#about" className="text-sm hover:text-purple-600">About Us</a>
-          <a href="#members" className="text-sm hover:text-purple-600">Members</a>
-          <a href="#mentoring" className="text-sm hover:text-purple-600">Mentoring</a>
-          <a href="#activities" className="text-sm hover:text-purple-600">Activities</a>
-          <a href="#attendance" className="text-sm hover:text-purple-600">Attendance</a>
+        <div className="flex items-center gap-12 bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto">
+          <a href="#about" className="text-xl hover:text-nyu-purple">About Us</a>
+          <a href="#members" className="text-xl hover:text-nyu-purple">Members</a>
+          <a href="#mentoring" className="text-xl hover:text-nyu-purple">Mentoring</a>
+          <a href="#activities" className="text-xl hover:text-nyu-purple">Activities</a>
+          <a href="#attendance" className="text-xl hover:text-nyu-purple">Attendance</a>
         </div>
 
-        <button className="px-6 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-50">
+        <button className="px-[28px] py-[13px] border border-black rounded-full text-sm hover:bg-gray-50 text-xl font-normal ml-[21px]">
           Log In
         </button>
       </nav>
 
       {/* Hero Section */}
-      <section className="text-center py-20 px-8">
-        <h1 className="text-6xl font-bold mb-8">
-          LikeLion x <span className="text-purple-600">NYU</span>
+      <section className="text-center py-[60px]">
+        <h1 className="text-[96px] font-bold mb-[60px]">
+          LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
         </h1>
         
-        <p className="max-w-2xl mx-auto text-gray-600 leading-relaxed mb-8">
+        <p className="max-w-[800px] mx-auto text-gray-600 leading-relaxed mb-[60px]">
           Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing versions of Lorem Ipsum.
         </p>
 
-        <button className="px-8 py-2 border-2 border-black rounded-full text-sm hover:bg-black hover:text-white transition-colors">
-          Join Us
+        <button className="px-[24px] py-[8px] border border-black rounded-full text-[20px] font-normal hover:bg-gray-100 transition-colors mb-[135px]">
+          Join Us 
         </button>
       </section>
 
