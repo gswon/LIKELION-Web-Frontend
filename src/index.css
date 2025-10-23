@@ -17,8 +17,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-/* Custom font sizes */
-.text-custom-32 {
-  font-size: 32px;
-}

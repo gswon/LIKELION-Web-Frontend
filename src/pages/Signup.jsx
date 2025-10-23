@@ -23,11 +23,6 @@ export default function SignUpPage() {
     password: '',
     current_university: '',
     team: '',
-    is_admin: false,
-    is_undergraduate: false,
-    is_mentor: false,
-    is_graduated: false,
-    is_active: true
   });
 
   const [loading, setLoading] = useState(false);
@@ -60,7 +55,7 @@ export default function SignUpPage() {
 
       if (response.ok) {
         const result = await response.json();
-        setMessage('✅ 회원가입이 완료되었습니다!');
+        setMessage('Sign Up was Successful!');
         console.log('서버 응답:', result);
         
         // 폼 초기화
@@ -72,18 +67,13 @@ export default function SignUpPage() {
           password: '',
           current_university: '',
           team: '',
-          is_admin: false,
-          is_undergraduate: false,
-          is_mentor: false,
-          is_graduated: false,
-          is_active: true
         });
       } else {
-        setMessage('❌ 회원가입에 실패했습니다.');
+        setMessage('Failed to Sign Up');
       }
     } catch (error) {
-      console.error('에러 발생:', error);
-      setMessage('❌ 서버 연결에 실패했습니다.');
+      console.error('Error Occurred:', error);
+      setMessage('Failed to connect to the Server');
     } finally {
       setLoading(false);
     }
@@ -92,41 +82,40 @@ export default function SignUpPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="flex items-center px-8 py-4 bg-white justify-between">
-        <div className="text-custom-32 font-bold">
-          LikeLion x <span className="text-purple-600">NYU</span>
+      <nav className="flex items-center w-full px-[32px] py-[16px] bg-white">
+        <div className="flex text-[32px] font-bold">
+          LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
         </div>
         
-        <div className="flex items-center gap-12 bg-white border border-black rounded-full px-[48px] py-[13px] font-normal">
-          <a href="#about" className="text-xl hover:text-purple-600">About Us</a>
-          <a href="#members" className="text-xl hover:text-purple-600">Members</a>
-          <a href="#mentoring" className="text-xl hover:text-purple-600">Mentoring</a>
-          <a href="#activities" className="text-xl hover:text-purple-600">Activities</a>
-          <a href="#attendance" className="text-xl hover:text-purple-600">Attendance</a>
+        <div className="flex items-center gap-12 bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto">
+          <a href="#about" className="text-xl hover:text-nyu-purple">About Us</a>
+          <a href="#members" className="text-xl hover:text-nyu-purple">Members</a>
+          <a href="#mentoring" className="text-xl hover:text-nyu-purple">Mentoring</a>
+          <a href="#activities" className="text-xl hover:text-nyu-purple">Activities</a>
+          <a href="#attendance" className="text-xl hover:text-nyu-purple">Attendance</a>
         </div>
-        
 
-        <button className="px-[28px] py-[13px] border border-black rounded-full text-sm hover:bg-gray-50 text-xl font-normal">
+        <button className="px-[28px] py-[13px] border border-black rounded-full text-sm hover:bg-gray-50 text-xl font-normal ml-[21px]">
           Log In
         </button>
       </nav>
 
       {/* Main Content */}
-      <div className="px-8 py-12">
-        <h1 className="text-5xl font-bold mb-12">Sign Up</h1>
+      <div className="px-[32px] py-[48px]">
+        <h1 className="text-[64px] font-bold mb-[48px]">Sign Up</h1>
 
         <div className="max-w-xl mx-auto">
-          <div className="bg-white border-2 border-gray-300 rounded-3xl p-12">
+          <div className="bg-white border border-black rounded-[50px] px-[72px] pt-[30px] pb-[43px]">
             {/* Title */}
-            <h2 className="text-4xl font-bold text-center mb-12">
-              LikeLion x <span className="text-purple-600">NYU</span>
+            <h2 className="text-[48px] font-bold text-center mb-[48px]">
+              LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
             </h2>
 
             {/* Form */}
-            <div className="space-y-6">
+            <div className="space-y-[16px]">
               {/* Korean Name */}
               <div>
-                <label className="block text-base font-semibold mb-2">
+                <label className="block text-[20px] font-bold mb-[12px]">
                   Korean Name:
                 </label>
                 <input
@@ -135,13 +124,13 @@ export default function SignUpPage() {
                   value={formData.korean_name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:border-purple-600"
+                  className="w-full px-[16px] py-[9px] border border-black rounded-full focus:outline-none focus:border-nyu-purple text-[16px]"
                 />
               </div>
 
               {/* English Name */}
               <div>
-                <label className="block text-base font-semibold mb-2">
+                <label className="block text-[20px] font-bold mb-[12px]">
                   English Name:
                 </label>
                 <input
@@ -150,13 +139,13 @@ export default function SignUpPage() {
                   value={formData.english_name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:border-purple-600"
+                  className="w-full px-[16px] py-[9px] border border-black rounded-full focus:outline-none focus:border-nyu-purple text-[16px]"
                 />
               </div>
 
               {/* School Email */}
               <div>
-                <label className="block text-base font-semibold mb-2">
+                <label className="block text-[20px] font-bold mb-[12px]">
                   School Email:
                 </label>
                 <input
@@ -166,13 +155,13 @@ export default function SignUpPage() {
                   onChange={handleChange}
                   required
                   placeholder="example@nyu.edu"
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:border-purple-600"
+                  className="w-full px-[16px] py-[9px] border border-black rounded-full focus:outline-none focus:border-nyu-purple text-[16px]"
                 />
               </div>
 
               {/* Password */}
               <div>
-                <label className="block text-base font-semibold mb-2">
+                <label className="block text-[20px] font-bold mb-[12px]">
                   Password:
                 </label>
                 <input
@@ -181,13 +170,13 @@ export default function SignUpPage() {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:border-purple-600"
+                  className="w-full px-[16px] py-[9px] border border-black rounded-full focus:outline-none focus:border-nyu-purple text-[16px]"
                 />
               </div>
 
               {/* Current University */}
               <div>
-                <label className="block text-base font-semibold mb-2">
+                <label className="block text-[20px] font-bold mb-[12px]">
                   Current University:
                 </label>
                 <input
@@ -197,13 +186,13 @@ export default function SignUpPage() {
                   onChange={handleChange}
                   required
                   placeholder="New York University"
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:border-purple-600"
+                  className="w-full px-[16px] py-[9px] border border-black rounded-full focus:outline-none focus:border-nyu-purple text-[16px]"
                 />
               </div>
 
               {/* Graduation Year */}
               <div>
-                <label className="block text-base font-semibold mb-2">
+                <label className="block text-[20px] font-bold mb-[12px]">
                   Graduation Year:
                 </label>
                 <input
@@ -215,13 +204,13 @@ export default function SignUpPage() {
                   min="2000"
                   max="2030"
                   placeholder="2025"
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:border-purple-600"
+                  className="w-full px-[16px] py-[9px] border border-black rounded-full focus:outline-none focus:border-nyu-purple text-[16px]"
                 />
               </div>
 
               {/* Team */}
               <div>
-                <label className="block text-base font-semibold mb-2">
+                <label className="block text-[20px] font-bold mb-[12px]">
                   Team (Project/Study):
                 </label>
                 <input
@@ -229,85 +218,17 @@ export default function SignUpPage() {
                   name="team"
                   value={formData.team}
                   onChange={handleChange}
-                  placeholder="Development Team"
-                  className="w-full px-4 py-3 border border-black rounded-full focus:outline-none focus:border-purple-600"
+                  placeholder="Frontend Team"
+                  className="w-full px-[16px] py-[9px] border border-black rounded-full focus:outline-none focus:border-nyu-purple text-[16px]"
                 />
               </div>
 
-              {/* Checkboxes */}
-              <div className="space-y-4 pt-4 pb-2">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="is_undergraduate"
-                    checked={formData.is_undergraduate}
-                    onChange={handleChange}
-                    className="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                  />
-                  <label className="ml-3 text-base font-medium">
-                    Undergraduate Student (학사 과정)
-                  </label>
-                </div>
-
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="is_graduated"
-                    checked={formData.is_graduated}
-                    onChange={handleChange}
-                    className="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                  />
-                  <label className="ml-3 text-base font-medium">
-                    Graduated (졸업 여부)
-                  </label>
-                </div>
-
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="is_mentor"
-                    checked={formData.is_mentor}
-                    onChange={handleChange}
-                    className="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                  />
-                  <label className="ml-3 text-base font-medium">
-                    Mentor (멘토)
-                  </label>
-                </div>
-
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="is_active"
-                    checked={formData.is_active}
-                    onChange={handleChange}
-                    className="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                  />
-                  <label className="ml-3 text-base font-medium">
-                    Currently Active (현재 활동중)
-                  </label>
-                </div>
-
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="is_admin"
-                    checked={formData.is_admin}
-                    onChange={handleChange}
-                    className="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                  />
-                  <label className="ml-3 text-base font-medium">
-                    Admin (관리자 권한)
-                  </label>
-                </div>
-              </div>
-
               {/* Submit Button */}
-              <div className="flex justify-center pt-6">
+              <div className="flex justify-center pt-[30px]">
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="px-12 py-3 border-2 border-gray-300 rounded-full text-base font-medium hover:bg-gray-100 disabled:bg-gray-200 disabled:cursor-not-allowed transition-colors"
+                  className="px-[24px] py-[8px] border border-black rounded-full text-[20px] font-normal hover:bg-gray-100 disabled:bg-gray-200 disabled:cursor-not-allowed transition-colors"
                 >
                   {loading ? '제출 중...' : 'Submit'}
                 </button>
@@ -315,8 +236,8 @@ export default function SignUpPage() {
 
               {/* Message */}
               {message && (
-                <div className={`text-center py-3 px-4 rounded-full ${
-                  message.includes('완료') 
+                <div className={`text-center py-[12px] px-[16px] rounded-full ${
+                  message.includes('Success') 
                     ? 'bg-green-100 text-green-800' 
                     : 'bg-red-100 text-red-800'
                 }`}>
