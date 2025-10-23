@@ -7,6 +7,7 @@ module.exports = {
     extend: {
       colors: {
         'nyu-purple': '#57068c',
+        'll-orange': '#FF6000'
       },
     },
   },

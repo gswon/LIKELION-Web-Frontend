@@ -58,20 +58,20 @@ export default function AttendancePage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="flex items-center justify-between px-8 py-4 border-b border-gray-200">
-        <div className="text-xl font-bold">
-          LikeLion x <span className="text-purple-600">NYU</span>
+      <nav className="flex items-center w-full px-[32px] py-[16px] bg-white">
+        <div className="flex text-[32px] font-bold">
+          LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
         </div>
         
-        <div className="flex items-center gap-6 bg-white border-2 border-gray-300 rounded-full px-8 py-2">
-          <a href="#about" className="text-sm hover:text-purple-600">About Us</a>
-          <a href="#members" className="text-sm hover:text-purple-600">Members</a>
-          <a href="#mentoring" className="text-sm hover:text-purple-600">Mentoring</a>
-          <a href="#activities" className="text-sm hover:text-purple-600">Activities</a>
-          <a href="#attendance" className="text-sm hover:text-purple-600">Attendance</a>
+        <div className="flex items-center gap-12 bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto">
+          <a href="#about" className="text-xl hover:text-nyu-purple">About Us</a>
+          <a href="#members" className="text-xl hover:text-nyu-purple">Members</a>
+          <a href="#mentoring" className="text-xl hover:text-nyu-purple">Mentoring</a>
+          <a href="#activities" className="text-xl hover:text-nyu-purple">Activities</a>
+          <a href="#attendance" className="text-xl hover:text-nyu-purple">Attendance</a>
         </div>
 
-        <button className="px-6 py-2 border-2 border-gray-300 rounded-full text-sm hover:bg-gray-50">
+        <button className="px-[28px] py-[13px] border border-black rounded-full text-sm hover:bg-gray-50 text-xl font-normal ml-[21px]">
           Log In
         </button>
       </nav>
@@ -105,7 +105,7 @@ export default function AttendancePage() {
 
               {/* Password */}
               <div>
-                <label className="block text-lg font-semibold mb-3">
+                <label className="block text-lg font-semibold mb-[12px]">
                   Password:
                 </label>
                 <input
@@ -117,36 +117,27 @@ export default function AttendancePage() {
                 />
               </div>
 
-              {/* Check In Button */}
-              <div className="flex justify-center pt-8">
+              {/* Login Button */}
+              <div className="flex justify-center pt-[30px]">
                 <button
                   onClick={handleAttendance}
                   disabled={loading}
                   className="px-[24px] py-[8px] border border-black rounded-full text-[20px] font-normal hover:bg-gray-100 disabled:bg-gray-200 disabled:cursor-not-allowed transition-colors"
                 >
-                  {loading ? '처리 중...' : 'Log In'}
+                  {loading ? 'Logging in...' : 'Log In'}
                 </button>
               </div>
 
               {/* Message */}
               {message && (
-                <div className={`text-center py-3 px-4 rounded-full text-sm ${
-                  message.includes('완료') 
+                <div className={`text-center py-[12px] px-[16px] rounded-full ${
+                  message.includes('Success!') 
                     ? 'bg-green-100 text-green-800' 
                     : 'bg-red-100 text-red-800'
                 }`}>
                   {message}
                 </div>
               )}
-
-              {/* Sign Up Link */}
-              <div className="text-center pt-4">
-                <p className="text-sm text-gray-600">
-                  {' '}
-                  <a href="#signup" className="text-orange-500 font-semibold hover:text-orange-600">
-                  </a>
-                </p>
-              </div>
             </div>
           </div>
         </div>

@@ -99,7 +99,7 @@ export default function LoginPage() {
 
               {/* Password */}
               <div>
-                <label className="block text-lg font-semibold mb-3">
+                <label className="block text-lg font-semibold mb-[12px]">
                   Password:
                 </label>
                 <input
@@ -112,36 +112,36 @@ export default function LoginPage() {
               </div>
 
               {/* Login Button */}
-              <div className="flex justify-center pt-8">
+              <div className="flex justify-center pt-[30px]">
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
                   className="px-[24px] py-[8px] border border-black rounded-full text-[20px] font-normal hover:bg-gray-100 disabled:bg-gray-200 disabled:cursor-not-allowed transition-colors"
                 >
-                  {loading ? '로그인 중...' : 'Log In'}
+                  {loading ? 'Logging in...' : 'Log In'}
                 </button>
+              </div>
+
+              {/* Sign Up Link */}
+              <div className="text-center pt-[25px]">
+                <p className="text-[14px]">
+                  Don't have an account?{' '}
+                  <a href="#signup" className="text-ll-orange font-bold hover:underline">
+                    Sign Up
+                  </a>
+                </p>
               </div>
 
               {/* Message */}
               {message && (
-                <div className={`text-center py-3 px-4 rounded-full text-sm ${
-                  message.includes('성공') 
+                <div className={`text-center py-[12px] px-[16px] rounded-full ${
+                  message.includes('Success!') 
                     ? 'bg-green-100 text-green-800' 
                     : 'bg-red-100 text-red-800'
                 }`}>
                   {message}
                 </div>
               )}
-
-              {/* Sign Up Link */}
-              <div className="text-center pt-4">
-                <p className="text-sm text-gray-600">
-                  Don't have an account?{' '}
-                  <a href="#signup" className="text-orange-500 font-semibold hover:text-orange-600">
-                    Sign Up
-                  </a>
-                </p>
-              </div>
             </div>
           </div>
         </div>

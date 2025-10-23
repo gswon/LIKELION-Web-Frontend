@@ -7,7 +7,7 @@ import AttendancePage  from './pages/Attendance';
 
 function App() {
   return (
-    <SignUpPage />
+    <AttendancePage />
   );
 }
 
