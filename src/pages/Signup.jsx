@@ -75,8 +75,7 @@ export default function SignUpPage() {
           navigate('/');
         }, 1000); // 1초 후 이동 (성공 메시지를 보여주기 위함)
       } else {
-        setMessage(JSON.stringify(response.status));
-        //setMessage('Failed to Sign Up');
+        setMessage("Failed to Sign Up");
       }
     } catch (error) {
       console.error('Error Occurred:', error);
@@ -90,7 +89,10 @@ export default function SignUpPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
       <nav className="flex items-center w-full px-[32px] py-[16px] bg-white">
-        <div className="flex text-[32px] font-bold">
+        <div
+          onClick={() => navigate('/')}
+          className="flex text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
+        >
           LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
         </div>
         

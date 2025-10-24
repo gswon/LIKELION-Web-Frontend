@@ -10,10 +10,10 @@ export default function LikeLionNYU() {
   const [currentCommunity, setCurrentCommunity] = useState(0);
 
   const admins = [
-    { position: 'President', name: 'Gangwon Suh' },
-    { position: 'Vice-President', name: 'Gangwon Suh' },
+    { position: 'President', name: 'Kristie Lee' },
+    { position: 'Vice-President', name: 'Juno Lee' },
     { position: 'PM', name: 'Gangwon Suh' },
-    { position: 'Marketing', name: 'Gangwon Suh' },
+    { position: 'Marketing', name: 'HyeMin Kim' },
   ];
 
   const communities = [
@@ -49,7 +49,10 @@ export default function LikeLionNYU() {
     <div className="min-h-screen bg-white">
       {/* Navigation */}
       <nav className="flex items-center w-full px-[32px] py-[16px] bg-white">
-        <div className="flex text-[32px] font-bold">
+        <div
+          onClick={() => navigate('/')}
+          className="flex text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
+        >
           LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
         </div>
         

@@ -63,7 +63,10 @@ export default function AttendancePage() {
     <div className="min-h-screen bg-white">
       {/* Navigation */}
       <nav className="flex items-center w-full px-[32px] py-[16px] bg-white">
-        <div className="flex text-[32px] font-bold">
+        <div
+          onClick={() => navigate('/')}
+          className="flex text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
+        >
           LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
         </div>
         
@@ -75,7 +78,10 @@ export default function AttendancePage() {
           <button onClick={() => navigate('/attendance')} className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer">Attendance</button>
         </div>
 
-        <button className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px]">
+        <button
+          onClick={() => navigate('/login')}
+          className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px]"
+        >
           Log In
         </button>
       </nav>

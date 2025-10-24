@@ -59,7 +59,10 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
       <nav className="flex items-center w-full px-[32px] py-[16px] bg-white">
-        <div className="flex text-[32px] font-bold">
+        <div
+          onClick={() => navigate('/')}
+          className="flex text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
+        >
           LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
         </div>
         
