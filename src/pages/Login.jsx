@@ -57,15 +57,15 @@ export default function LoginPage() {
           LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
         </div>
         
-        <div className="flex items-center gap-12 bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto">
-          <a href="#about" className="text-xl hover:text-nyu-purple">About Us</a>
-          <a href="#members" className="text-xl hover:text-nyu-purple">Members</a>
-          <a href="#mentoring" className="text-xl hover:text-nyu-purple">Mentoring</a>
-          <a href="#activities" className="text-xl hover:text-nyu-purple">Activities</a>
-          <a href="#attendance" className="text-xl hover:text-nyu-purple">Attendance</a>
+        <div className="flex items-center gap-[48px] bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto">
+          <a href="#about" className="text-[20px] hover:text-nyu-purple">About Us</a>
+          <a href="#members" className="text-[20px] hover:text-nyu-purple">Members</a>
+          <a href="#mentoring" className="text-[20px] hover:text-nyu-purple">Mentoring</a>
+          <a href="#activities" className="text-[20px] hover:text-nyu-purple">Activities</a>
+          <a href="#attendance" className="text-[20px] hover:text-nyu-purple">Attendance</a>
         </div>
 
-        <button className="px-[28px] py-[13px] border border-black rounded-full text-sm hover:bg-gray-50 text-xl font-normal ml-[21px]">
+        <button className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px]">
           Log In
         </button>
       </nav>
