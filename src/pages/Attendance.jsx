@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function AttendancePage() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
+    school_email: '',
     password: ''
   });
 
@@ -23,33 +26,34 @@ export default function AttendancePage() {
 
     try {
       // 여기에 실제 백엔드 API 주소를 입력하세요
-      const response = await fetch('https://your-backend-api.com/api/attendance', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/attendance`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          timestamp: new Date().toISOString()
-        })
+        body: JSON.stringify(formData)
       });
 
       if (response.ok) {
         const result = await response.json();
-        setMessage('✅ 출석 체크가 완료되었습니다!');
+        setMessage('Attendance Successful!');
         console.log('서버 응답:', result);
         
         // 폼 초기화
         setFormData({
-          email: '',
+          school_email: '',
           password: ''
         });
+
+        setTimeout(() => {
+          navigate('/');
+        }, 1000); // 1초 후 이동 (성공 메시지를 보여주기 위함)
       } else {
-        setMessage('❌ 이메일 또는 비밀번호가 잘못되었습니다.');
+        setMessage('Incorrect email or password');
       }
     } catch (error) {
       console.error('에러 발생:', error);
-      setMessage('❌ 서버 연결에 실패했습니다.');
+      setMessage('Failed to connect to the server');
     } finally {
       setLoading(false);
     }
@@ -68,7 +72,7 @@ export default function AttendancePage() {
           <a href="#members" className="text-[20px] hover:text-nyu-purple">Members</a>
           <a href="#mentoring" className="text-[20px] hover:text-nyu-purple">Mentoring</a>
           <a href="#activities" className="text-[20px] hover:text-nyu-purple">Activities</a>
-          <a href="#attendance" className="text-[20px] hover:text-nyu-purple">Attendance</a>
+          <button onClick={() => navigate('/attendance')} className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer">Attendance</button>
         </div>
 
         <button className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px]">
@@ -96,8 +100,8 @@ export default function AttendancePage() {
                 </label>
                 <input
                   type="email"
-                  name="email"
-                  value={formData.email}
+                  name="school_email"
+                  value={formData.school_email}
                   onChange={handleChange}
                   className="w-full px-[16px] py-[9px] border border-black rounded-full focus:outline-none focus:border-nyu-purple text-[16px]"
                 />
@@ -131,7 +135,7 @@ export default function AttendancePage() {
               {/* Message */}
               {message && (
                 <div className={`text-center py-[12px] px-[16px] rounded-full ${
-                  message.includes('Success!') 
+                  message.includes('Success') 
                     ? 'bg-green-100 text-green-800' 
                     : 'bg-red-100 text-red-800'
                 }`}>

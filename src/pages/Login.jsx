@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
+    school_email: '',
     password: ''
   });
 
@@ -23,7 +25,8 @@ export default function LoginPage() {
 
     try {
       // 여기에 실제 백엔드 API 주소를 입력하세요
-      const response = await fetch('https://your-backend-api.com/api/login', {
+      
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,17 +36,20 @@ export default function LoginPage() {
 
       if (response.ok) {
         const result = await response.json();
-        setMessage('✅ 로그인 성공!');
+        setMessage('Login Successful!');
         console.log('서버 응답:', result);
-        
-        // 로그인 성공 후 처리 (예: 페이지 이동)
-        // window.location.href = '/dashboard';
+
+        // 로그인 성공 후 LandingPage로 이동
+        setTimeout(() => {
+          navigate('/');
+        }, 1000); // 1초 후 이동 (성공 메시지를 보여주기 위함)
       } else {
-        setMessage('❌ 이메일 또는 비밀번호가 잘못되었습니다.');
+        console.log()
+        setMessage("Missing Email or Password.");
       }
     } catch (error) {
       console.error('에러 발생:', error);
-      setMessage('❌ 서버 연결에 실패했습니다.');
+      setMessage('Failed to Connect to the Server.');
     } finally {
       setLoading(false);
     }
@@ -62,10 +68,13 @@ export default function LoginPage() {
           <a href="#members" className="text-[20px] hover:text-nyu-purple">Members</a>
           <a href="#mentoring" className="text-[20px] hover:text-nyu-purple">Mentoring</a>
           <a href="#activities" className="text-[20px] hover:text-nyu-purple">Activities</a>
-          <a href="#attendance" className="text-[20px] hover:text-nyu-purple">Attendance</a>
+          <button onClick={() => navigate('/attendance')} className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer">Attendance</button>
         </div>
 
-        <button className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px]">
+        <button
+          onClick={() => navigate('/login')}
+          className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px]"
+        >
           Log In
         </button>
       </nav>
@@ -90,8 +99,8 @@ export default function LoginPage() {
                 </label>
                 <input
                   type="email"
-                  name="email"
-                  value={formData.email}
+                  name="school_email"
+                  value={formData.school_email}
                   onChange={handleChange}
                   className="w-full px-[16px] py-[9px] border border-black rounded-full focus:outline-none focus:border-nyu-purple text-[16px]"
                 />
@@ -126,16 +135,19 @@ export default function LoginPage() {
               <div className="text-center pt-[25px]">
                 <p className="text-[14px]">
                   Don't have an account?{' '}
-                  <a href="#signup" className="text-ll-orange font-bold hover:underline">
+                  <span
+                    onClick={() => navigate('/signup')}
+                    className="text-ll-orange font-bold hover:underline cursor-pointer"
+                  >
                     Sign Up
-                  </a>
+                  </span>
                 </p>
               </div>
 
               {/* Message */}
               {message && (
                 <div className={`text-center py-[12px] px-[16px] rounded-full ${
-                  message.includes('Success!') 
+                  message.includes('Success') 
                     ? 'bg-green-100 text-green-800' 
                     : 'bg-red-100 text-red-800'
                 }`}>

@@ -13,14 +13,16 @@
 // is_active: bool			현재 활동중인지 여부
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUpPage() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    school_email: '',
+    password: '',
     korean_name: '',
     english_name: '',
     graduate_year: '',
-    school_email: '',
-    password: '',
     current_university: '',
     team: '',
   });
@@ -42,7 +44,7 @@ export default function SignUpPage() {
 
     try {
       // 여기에 실제 백엔드 API 주소를 입력하세요
-      const response = await fetch('http://localhost:3000/api/members-users/signup', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member-users/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,16 +62,21 @@ export default function SignUpPage() {
         
         // 폼 초기화
         setFormData({
+          school_email: '',
+          password: '',
           korean_name: '',
           english_name: '',
           graduate_year: '',
-          school_email: '',
-          password: '',
           current_university: '',
           team: '',
         });
+
+        setTimeout(() => {
+          navigate('/');
+        }, 1000); // 1초 후 이동 (성공 메시지를 보여주기 위함)
       } else {
-        setMessage('Failed to Sign Up');
+        setMessage(JSON.stringify(response.status));
+        //setMessage('Failed to Sign Up');
       }
     } catch (error) {
       console.error('Error Occurred:', error);
@@ -92,10 +99,13 @@ export default function SignUpPage() {
           <a href="#members" className="text-[20px] hover:text-nyu-purple">Members</a>
           <a href="#mentoring" className="text-[20px] hover:text-nyu-purple">Mentoring</a>
           <a href="#activities" className="text-[20px] hover:text-nyu-purple">Activities</a>
-          <a href="#attendance" className="text-[20px] hover:text-nyu-purple">Attendance</a>
+          <button onClick={() => navigate('/attendance')} className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer">Attendance</button>
         </div>
 
-        <button className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px]">
+        <button
+          onClick={() => navigate('/login')}
+          className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px]"
+        >
           Log In
         </button>
       </nav>
@@ -230,14 +240,14 @@ export default function SignUpPage() {
                   disabled={loading}
                   className="px-[24px] py-[8px] border border-black rounded-full text-[20px] font-normal hover:bg-gray-100 disabled:bg-gray-200 disabled:cursor-not-allowed transition-colors"
                 >
-                  {loading ? '제출 중...' : 'Submit'}
+                  {loading ? 'Submitting...' : 'Submit'}
                 </button>
               </div>
 
               {/* Message */}
               {message && (
                 <div className={`text-center py-[12px] px-[16px] rounded-full ${
-                  message.includes('Success!') 
+                  message.includes('Success') 
                     ? 'bg-green-100 text-green-800' 
                     : 'bg-red-100 text-red-800'
                 }`}>
@@ -245,16 +255,6 @@ export default function SignUpPage() {
                 </div>
               )}
             </div>
-          </div>
-
-          {/* 입력 데이터 미리보기 (개발용) */}
-          <div className="mt-6 p-4 bg-white border border-gray-200 rounded-lg">
-            <h3 className="font-semibold text-gray-700 mb-2 text-sm">
-              백엔드로 전송될 데이터:
-            </h3>
-            <pre className="text-xs text-gray-600 overflow-x-auto">
-              {JSON.stringify(formData, null, 2)}
-            </pre>
           </div>
         </div>
       </div>

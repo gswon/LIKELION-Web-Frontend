@@ -2,8 +2,10 @@
 // project에 대한 모든걸 가져오는 api
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LikeLionNYU() {
+  const navigate = useNavigate();
   const [currentAdmin, setCurrentAdmin] = useState(0);
   const [currentCommunity, setCurrentCommunity] = useState(0);
 
@@ -56,10 +58,13 @@ export default function LikeLionNYU() {
           <a href="#members" className="text-[20px] hover:text-nyu-purple">Members</a>
           <a href="#mentoring" className="text-[20px] hover:text-nyu-purple">Mentoring</a>
           <a href="#activities" className="text-[20px] hover:text-nyu-purple">Activities</a>
-          <a href="#attendance" className="text-[20px] hover:text-nyu-purple">Attendance</a>
+          <button onClick={() => navigate('/attendance')} className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer">Attendance</button>
         </div>
 
-        <button className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px]">
+        <button
+          onClick={() => navigate('/login')}
+          className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px]"
+        >
           Log In
         </button>
       </nav>
