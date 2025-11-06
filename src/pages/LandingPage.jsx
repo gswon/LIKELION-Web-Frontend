@@ -56,7 +56,7 @@ export default function LikeLionNYU() {
           LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
         </div>
         
-        <div className="flex items-center gap-[48px] bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto">
+        <div className="flex items-center gap-[48px] bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto shadow-button">
           <a href="#about" className="text-[20px] hover:text-nyu-purple">About Us</a>
           <a href="#members" className="text-[20px] hover:text-nyu-purple">Members</a>
           <a href="#mentoring" className="text-[20px] hover:text-nyu-purple">Mentoring</a>
@@ -66,7 +66,7 @@ export default function LikeLionNYU() {
 
         <button
           onClick={() => navigate('/login')}
-          className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px]"
+          className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px] shadow-button transition-all duration-200 hover:-translate-y-1 hover:shadow-hover"
         >
           Log In
         </button>
@@ -82,8 +82,8 @@ export default function LikeLionNYU() {
           Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing versions of Lorem Ipsum.
         </p>
 
-        <button className="px-[24px] py-[8px] border border-black rounded-full text-[20px] font-normal hover:bg-gray-100 transition-colors mb-[135px]">
-          Join Us 
+        <button className="px-[24px] py-[8px] border border-black rounded-full text-[20px] font-normal hover:bg-gray-100 mb-[135px] shadow-button transition-all duration-200 hover:-translate-y-1 hover:shadow-hover">
+          Join Us
         </button>
       </section>
 
@@ -105,7 +105,7 @@ export default function LikeLionNYU() {
                 <div className="text-center text-[24px] font-bold mb-[15px]">
                   {admin.position}
                 </div>
-                <div className="bg-white rounded-[20px] p-[15px] text-center">
+                <div className="bg-white rounded-[20px] p-[15px] text-center shadow-card">
                   <div className="bg-gray-300 rounded-[20px] aspect-[3/4] mb-[24px]"></div>
                   <div className="text-black font-bold py-[9px]">{admin.name}</div>
                 </div>
@@ -122,7 +122,7 @@ export default function LikeLionNYU() {
         </div>
 
         <div className="text-center mt-12">
-          <button className="bg-[#330662] px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-[#20043E]">
+          <button className="bg-[#330662] px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-[#20043E] shadow-members transition-all duration-200 hover:-translate-y-1 hover:shadow-hover">
             Meet Our Members
           </button>
         </div>
@@ -138,7 +138,7 @@ export default function LikeLionNYU() {
             ‹
           </button>
 
-          <div className="bg-black rounded-[30px] p-[48px] text-white">
+          <div className="bg-black rounded-[30px] p-[48px] text-white shadow-card">
             <div className="text-center mb-6">
               <span className="inline-block bg-gray-800 px-4 py-1 rounded-full text-xs uppercase tracking-wider mb-4">
                 {communities[currentCommunity].team}
