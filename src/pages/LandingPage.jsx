@@ -8,12 +8,50 @@ export default function LikeLionNYU() {
   const navigate = useNavigate();
   const [currentAdmin, setCurrentAdmin] = useState(0);
   const [currentCommunity, setCurrentCommunity] = useState(0);
+  const [flippedCards, setFlippedCards] = useState([]);
+  const [showActivitiesMenu, setShowActivitiesMenu] = useState(false);
 
   const admins = [
-    { position: 'President', name: 'Kristie Lee' },
-    { position: 'Vice-President', name: 'Juno Lee' },
-    { position: 'PM', name: 'Gangwon Suh' },
-    { position: 'Marketing', name: 'HyeMin Kim' },
+    {
+      position: 'President',
+      name: 'Kristie Lee',
+      description: 'Leading LikeLion NYU with passion and dedication. Focused on building a strong tech community and fostering innovation among students.'
+    },
+    {
+      position: 'Vice-President',
+      name: 'Juno Lee',
+      description: 'Supporting the team with strategic planning and operations. Committed to creating meaningful learning experiences for all members.'
+    },
+    {
+      position: 'PM',
+      name: 'Gangwon Suh',
+      description: 'Managing projects and coordinating team efforts. Dedicated to delivering high-quality solutions and mentoring developers.'
+    },
+    {
+      position: 'Marketing',
+      name: 'HyeMin Kim',
+      description: 'Promoting LikeLion NYU and building our brand. Passionate about connecting with students and sharing our vision.'
+    },
+    {
+      position: 'Tech Lead',
+      name: 'Sarah Kim',
+      description: 'Guiding technical direction and architecture. Passionate about code quality and mentoring junior developers in best practices.'
+    },
+    {
+      position: 'Designer',
+      name: 'Mike Chen',
+      description: 'Creating beautiful and intuitive user experiences. Focused on bringing creative visions to life through thoughtful design.'
+    },
+    {
+      position: 'Developer',
+      name: 'Emily Park',
+      description: 'Building robust and scalable applications. Dedicated to writing clean code and implementing innovative solutions.'
+    },
+    {
+      position: 'Content Lead',
+      name: 'Alex Johnson',
+      description: 'Crafting engaging content and community stories. Committed to amplifying student voices and sharing impactful narratives.'
+    },
   ];
 
   const communities = [
@@ -45,6 +83,14 @@ export default function LikeLionNYU() {
     setCurrentCommunity((prev) => (prev - 1 + communities.length) % communities.length);
   };
 
+  const handleCardHover = (index, isHovering) => {
+    if (isHovering) {
+      setFlippedCards([...flippedCards, index]);
+    } else {
+      setFlippedCards(flippedCards.filter(i => i !== index));
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -60,7 +106,36 @@ export default function LikeLionNYU() {
           <a href="#about" className="text-[20px] hover:text-nyu-purple">About Us</a>
           <a href="#members" className="text-[20px] hover:text-nyu-purple">Members</a>
           <a href="#mentoring" className="text-[20px] hover:text-nyu-purple">Mentoring</a>
-          <a href="#activities" className="text-[20px] hover:text-nyu-purple">Activities</a>
+          
+          
+          {/* hovering 했을때 events/project가 보이는 부분*/}
+          <div
+            className="relative"
+            onMouseEnter={() => setShowActivitiesMenu(true)}
+            onMouseLeave={() => setShowActivitiesMenu(false)}
+          >
+            <a href="#activities" className="text-[20px] hover:text-nyu-purple cursor-pointer">
+              Activities
+            </a>
+
+            {showActivitiesMenu && (
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-black rounded-lg shadow-lg py-2 min-w-[120px] z-50">
+                <a
+                  href="#events"
+                  className="block px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors"
+                >
+                  Events
+                </a>
+                <a
+                  href="#projects"
+                  className="block px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors"
+                >
+                  Projects
+                </a>
+              </div>
+            )}
+          </div>
+
           <button onClick={() => navigate('/attendance')} className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer">Attendance</button>
         </div>
 
@@ -105,9 +180,42 @@ export default function LikeLionNYU() {
                 <div className="text-center text-[24px] font-bold mb-[15px]">
                   {admin.position}
                 </div>
-                <div className="bg-white rounded-[20px] p-[15px] text-center shadow-card">
-                  <div className="bg-gray-300 rounded-[20px] aspect-[3/4] mb-[24px]"></div>
-                  <div className="text-black font-bold py-[9px]">{admin.name}</div>
+                <div
+                  onMouseEnter={() => handleCardHover(index, true)}
+                  onMouseLeave={() => handleCardHover(index, false)}
+                  className="relative cursor-pointer"
+                  style={{ perspective: '1000px', height: '400px' }}
+                >
+                  <div
+                    className="relative w-full h-full transition-transform duration-1000"
+                    style={{
+                      transformStyle: 'preserve-3d',
+                      transform: flippedCards.includes(index) ? 'rotateY(180deg)' : 'rotateY(0deg)'
+                    }}
+                  >
+                    {/* Front Side */}
+                    <div
+                      className="absolute w-full h-full bg-white rounded-[20px] p-[15px] text-center shadow-card"
+                      style={{ backfaceVisibility: 'hidden' }}
+                    >
+                      <div className="bg-gray-300 rounded-[20px] aspect-[3/4] mb-[24px]"></div>
+                      <div className="text-black font-bold py-[9px]">{admin.name}</div>
+                    </div>
+
+                    {/* Back Side */}
+                    <div
+                      className="absolute w-full h-full bg-white rounded-[20px] p-[15px] text-center shadow-card flex flex-col justify-center items-center"
+                      style={{
+                        backfaceVisibility: 'hidden',
+                        transform: 'rotateY(180deg)'
+                      }}
+                    >
+                      <div className="text-black font-bold text-[20px] mb-[16px]">{admin.name}</div>
+                      <div className="text-gray-700 text-[14px] leading-relaxed px-[12px]">
+                        {admin.description}
+                      </div>
+                    </div>
+                  </div>
                 </div>
             </div>
             ))}
@@ -195,9 +303,9 @@ export default function LikeLionNYU() {
 
       {/* Footer */}
       <footer className="py-12 text-center">
-        <a 
-          href="https://instagram.com" 
-          target="_blank" 
+        <a
+          href="https://instagram.com"
+          target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center w-10 h-10 hover:text-opacity-70 transition-opacity"
         >

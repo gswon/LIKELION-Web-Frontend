@@ -20,10 +20,20 @@ module.exports = {
         'button-pop': {
           '0%': { transform: 'translateY(0)' },
           '100%': { transform: 'translateY(-3px)' }
+        },
+        'flip': {
+          '0%': { transform: 'rotateY(0deg)' },
+          '100%': { transform: 'rotateY(180deg)' }
+        },
+        'flip-back': {
+          '0%': { transform: 'rotateY(180deg)' },
+          '100%': { transform: 'rotateY(0deg)' }
         }
       },
       animation: {
-        'button-pop': 'button-pop 0.2s ease-out forwards'
+        'button-pop': 'button-pop 0.2s ease-out forwards',
+        'flip': 'flip 1s ease-in-out forwards',
+        'flip-back': 'flip-back 1s ease-in-out forwards'
       }
     },
   },

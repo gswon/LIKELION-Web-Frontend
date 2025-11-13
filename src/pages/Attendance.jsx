@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 
 export default function AttendancePage() {
@@ -8,6 +9,8 @@ export default function AttendancePage() {
     school_email: '',
     password: ''
   });
+  const [searchParams] = useSearchParams();
+  const meetingNumber = searchParams.get('meeting_number');
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -36,13 +39,21 @@ export default function AttendancePage() {
     setMessage('');
 
     try {
+      // meeting_number를 포함한 데이터 준비
+      const attendanceData = {
+        ...formData,
+        meeting_number: meetingNumber ? parseInt(meetingNumber) : 0 // URL에서 읽은 meeting_number, 없으면 기본값 0
+      };
+
+      console.log('전송할 데이터:', attendanceData); // 디버깅용
+
       // 여기에 실제 백엔드 API 주소를 입력하세요
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/attendance`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(attendanceData)
       });
 
       if (response.ok) {
