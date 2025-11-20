@@ -129,7 +129,7 @@ export default function SignUpPage() {
     try {
       // 여기에 실제 백엔드 API 주소를 입력하세요
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/member-users/signup`,
+        `${process.env.REACT_APP_API_URL}/api/user/signup`,
         {
           method: 'POST',
           headers: {
