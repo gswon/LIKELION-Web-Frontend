@@ -47,7 +47,6 @@ export default function LoginPage() {
 
         // 로그인 성공 후 LandingPage로 이동
         setTimeout(() => {
-          window.scrollTo(0, 0);
           navigate('/');
         }, 1000); // 1초 후 이동 (성공 메시지를 보여주기 위함)
       } else {

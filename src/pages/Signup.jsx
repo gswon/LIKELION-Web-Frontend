@@ -159,7 +159,6 @@ export default function SignUpPage() {
         });
 
         setTimeout(() => {
-          window.scrollTo(0, 0);
           navigate('/');
         }, 1000); // 1초 후 이동 (성공 메시지를 보여주기 위함)
       } else if (response.status === 400) {
