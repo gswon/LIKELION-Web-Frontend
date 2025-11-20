@@ -27,7 +27,9 @@ export default function AdminPage() {
   const fetchMembers = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/adminpage/members_list`);
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/adminpage/members_list`
+      );
       const data = await response.json();
       setMembers(data.members || []);
     } catch (error) {
@@ -55,8 +57,8 @@ export default function AdminPage() {
         margin: 2,
         color: {
           dark: '#000000',
-          light: '#FFFFFF'
-        }
+          light: '#FFFFFF',
+        },
       });
 
       setQrImage(qrImageData);
@@ -76,11 +78,7 @@ export default function AdminPage() {
           className="flex items-center text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity text-white"
         >
           LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
-          <img
-            src={NYULogo}
-            alt="NYU Logo"
-            className="h-[32px] ml-[8px]"
-          />
+          <img src={NYULogo} alt="NYU Logo" className="h-[32px] ml-[8px]" />
         </div>
 
         <div className="flex items-center gap-[16px] ml-auto">
@@ -108,9 +106,7 @@ export default function AdminPage() {
       {/* Main Content with Dark Background */}
       <div className="min-h-[calc(100vh-80px)] bg-[#0a0a0a] flex items-center justify-center">
         {!showQR && !showUserManagement ? (
-          <h1 className="text-[96px] font-bold text-white">
-            NYU Admin Page
-          </h1>
+          <h1 className="text-[96px] font-bold text-white">NYU Admin Page</h1>
         ) : showQR ? (
           <div className="text-center">
             <h2 className="text-[48px] font-bold text-white mb-[40px]">
@@ -125,7 +121,8 @@ export default function AdminPage() {
               placeholder="Enter meeting number"
               className="px-[16px] py-[12px] text-[20px] w-[300px] rounded-lg bg-[#2a2a2a] border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-nyu-purple"
             />
-            <br /><br />
+            <br />
+            <br />
 
             {/* 생성 버튼 */}
             <button
@@ -135,7 +132,8 @@ export default function AdminPage() {
               Generate QR Code
             </button>
 
-            <br /><br />
+            <br />
+            <br />
 
             {/* QR 이미지 */}
             {qrImage && (
@@ -160,35 +158,144 @@ export default function AdminPage() {
             </h2>
 
             {loading ? (
-              <p className="text-white text-[24px] text-center">Loading members...</p>
+              <p className="text-white text-[24px] text-center">
+                Loading members...
+              </p>
             ) : (
               <div className="bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-800">
                 <table className="w-full">
                   <thead className="bg-[#2a2a2a]">
                     <tr>
-                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">ID</th>
-                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">Korean Name</th>
-                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">English Name</th>
-                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">Email</th>
-                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">University</th>
-                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">Team</th>
-                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">Grad Year</th>
-                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">Status</th>
+                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">
+                        ID
+                      </th>
+                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">
+                        Korean Name
+                      </th>
+                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">
+                        English Name
+                      </th>
+                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">
+                        School Email
+                      </th>
+                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">
+                        University
+                      </th>
+                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">
+                        Team
+                      </th>
+                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">
+                        Graduation Year
+                      </th>
+                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">
+                        Admin
+                      </th>
+                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">
+                        Undergrad
+                      </th>
+                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">
+                        Mentor
+                      </th>
+                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">
+                        Graduated
+                      </th>
+                      <th className="px-[16px] py-[12px] text-left text-white font-semibold">
+                        Active
+                      </th>
                     </tr>
                   </thead>
+
                   <tbody>
                     {members.length > 0 ? (
                       members.map((member, index) => (
-                        <tr key={member.member_id || index} className="border-t border-gray-800 hover:bg-[#2a2a2a] transition-colors">
-                          <td className="px-[16px] py-[12px] text-gray-300">{member.member_id}</td>
-                          <td className="px-[16px] py-[12px] text-gray-300">{member.korean_name}</td>
-                          <td className="px-[16px] py-[12px] text-gray-300">{member.english_name}</td>
-                          <td className="px-[16px] py-[12px] text-gray-300">{member.school_email}</td>
-                          <td className="px-[16px] py-[12px] text-gray-300">{member.current_university || 'N/A'}</td>
-                          <td className="px-[16px] py-[12px] text-gray-300">{member.team || 'N/A'}</td>
-                          <td className="px-[16px] py-[12px] text-gray-300">{member.graduate_year}</td>
+                        <tr
+                          key={member.member_id || index}
+                          className="border-t border-gray-800 hover:bg-[#2a2a2a] transition-colors"
+                        >
+                          <td className="px-[16px] py-[12px] text-gray-300">
+                            {member.member_id}
+                          </td>
+                          <td className="px-[16px] py-[12px] text-gray-300">
+                            {member.korean_name}
+                          </td>
+                          <td className="px-[16px] py-[12px] text-gray-300">
+                            {member.english_name}
+                          </td>
+                          <td className="px-[16px] py-[12px] text-gray-300">
+                            {member.school_email}
+                          </td>
+                          <td className="px-[16px] py-[12px] text-gray-300">
+                            {member.current_university || 'N/A'}
+                          </td>
+                          <td className="px-[16px] py-[12px] text-gray-300">
+                            {member.team || 'N/A'}
+                          </td>
+                          <td className="px-[16px] py-[12px] text-gray-300">
+                            {member.graduate_year}
+                          </td>
+
+                          {/* Boolean fields as badges */}
                           <td className="px-[16px] py-[12px]">
-                            <span className={`px-[12px] py-[4px] rounded-full text-[14px] ${member.is_active ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'}`}>
+                            <span
+                              className={`px-[12px] py-[4px] rounded-full text-[14px] 
+                ${
+                  member.is_admin
+                    ? 'bg-blue-900 text-blue-300'
+                    : 'bg-gray-800 text-gray-400'
+                }`}
+                            >
+                              {member.is_admin ? 'Yes' : 'No'}
+                            </span>
+                          </td>
+
+                          <td className="px-[16px] py-[12px]">
+                            <span
+                              className={`px-[12px] py-[4px] rounded-full text-[14px] 
+                ${
+                  member.is_undergraduate
+                    ? 'bg-purple-900 text-purple-300'
+                    : 'bg-gray-800 text-gray-400'
+                }`}
+                            >
+                              {member.is_undergraduate ? 'Yes' : 'No'}
+                            </span>
+                          </td>
+
+                          <td className="px-[16px] py-[12px]">
+                            <span
+                              className={`px-[12px] py-[4px] rounded-full text-[14px] 
+                ${
+                  member.is_mentor
+                    ? 'bg-yellow-900 text-yellow-300'
+                    : 'bg-gray-800 text-gray-400'
+                }`}
+                            >
+                              {member.is_mentor ? 'Yes' : 'No'}
+                            </span>
+                          </td>
+
+                          <td className="px-[16px] py-[12px]">
+                            <span
+                              className={`px-[12px] py-[4px] rounded-full text-[14px] 
+                ${
+                  member.is_graduated
+                    ? 'bg-indigo-900 text-indigo-300'
+                    : 'bg-gray-800 text-gray-400'
+                }`}
+                            >
+                              {member.is_graduated ? 'Yes' : 'No'}
+                            </span>
+                          </td>
+
+                          <td className="px-[16px] py-[12px]">
+                            <span
+                              className={`px-[12px] py-[4px] rounded-full text-[14px] 
+                ${
+                  member.is_active
+                    ? 'bg-green-900 text-green-300'
+                    : 'bg-red-900 text-red-300'
+                }`}
+                            >
                               {member.is_active ? 'Active' : 'Inactive'}
                             </span>
                           </td>
@@ -196,7 +303,10 @@ export default function AdminPage() {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="8" className="px-[16px] py-[24px] text-center text-gray-500">
+                        <td
+                          colSpan="12"
+                          className="px-[16px] py-[24px] text-center text-gray-500"
+                        >
                           No members found
                         </td>
                       </tr>
