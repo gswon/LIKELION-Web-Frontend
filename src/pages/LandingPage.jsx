@@ -3,6 +3,7 @@
 
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import NYULogo from '../NYU_logo.jpg';
 
 export default function LikeLionNYU() {
   const navigate = useNavigate();
@@ -108,9 +109,14 @@ export default function LikeLionNYU() {
       <nav className="flex items-center w-full px-[32px] py-[16px] bg-white">
         <div
           onClick={() => navigate('/')}
-          className="flex text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
+          className="flex items-center text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
         >
           LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
+          <img
+            src={NYULogo}
+            alt="NYU Logo"
+            className="h-[32px] ml-[8px]"
+          />
         </div>
 
         <div className="flex items-center gap-[48px] bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto shadow-button">
@@ -193,8 +199,13 @@ export default function LikeLionNYU() {
 
       {/* Hero Section */}
       <section className="text-center py-[100px] px-[16px]">
-        <h1 className="text-[96px] font-bold mb-[60px]">
+        <h1 className="text-[96px] font-bold mb-[60px] flex items-center justify-center">
           LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
+          <img
+            src={NYULogo}
+            alt="NYU Logo"
+            className="h-[96px] ml-[16px]"
+          />
         </h1>
 
         <p className="max-w-[800px] mx-auto text-gray-600 leading-relaxed mb-[60px]">
