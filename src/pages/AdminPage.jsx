@@ -1,6 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import QRCode from 'qrcode';
 import NYULogo from '../NYU_logo.png';
 
 export default function AdminPage() {
