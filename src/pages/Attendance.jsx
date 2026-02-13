@@ -105,9 +105,6 @@ export default function AttendancePage() {
           <a href="#about" className="text-[20px] hover:text-nyu-purple">
             About Us
           </a>
-          <a href="#mentoring" className="text-[20px] hover:text-nyu-purple">
-            Mentoring
-          </a>
           {/* Activities Dropdown Menu */}
           <div
             className="relative"
@@ -154,12 +151,6 @@ export default function AttendancePage() {
             )}
           </div>
 
-          <button
-            onClick={() => navigate('/attendance')}
-            className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer"
-          >
-            Attendance
-          </button>
         </div>
 
         <button

@@ -135,10 +135,6 @@ export default function ProjectsPage() {
           <a href="/#about" className="text-[20px] hover:text-nyu-purple">
             About Us
           </a>
-          <a href="/#mentoring" className="text-[20px] hover:text-nyu-purple">
-            Mentoring
-          </a>
-
           {/* hovering 했을때 events/project가 보이는 부분*/}
           <div
             className="relative"
@@ -190,12 +186,6 @@ export default function ProjectsPage() {
             )}
           </div>
 
-          <button
-            onClick={() => navigate('/attendance')}
-            className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer"
-          >
-            Attendance
-          </button>
         </div>
 
         <button

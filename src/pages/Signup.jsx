@@ -60,6 +60,16 @@ export default function SignUpPage() {
       return;
     }
 
+    // 1-2. Other 선택 시 custom_university 공백 검사
+    if (
+      formData.current_university === 'Other' &&
+      (!formData.custom_university || !formData.custom_university.trim())
+    ) {
+      setMessage('Please enter your university name.');
+      setLoading(false);
+      return;
+    }
+
     // 2-1. Korean Name 검증 (한글만)
     if (!/^[가-힣]+$/.test(formData.korean_name)) {
       setMessage('Korean Name must contain only Korean characters.');
@@ -137,6 +147,11 @@ export default function SignUpPage() {
           },
           body: JSON.stringify({
             ...formData,
+            current_university:
+              formData.current_university === 'Other'
+                ? formData.custom_university.trim()
+                : formData.current_university,
+            custom_university: undefined,
             graduate_year: parseInt(formData.graduate_year),
           }),
         }
@@ -155,6 +170,7 @@ export default function SignUpPage() {
           english_name: '',
           graduate_year: '',
           current_university: '',
+          custom_university: '',
           team: '',
         });
 
@@ -340,7 +356,12 @@ export default function SignUpPage() {
                 <select
                   name="current_university"
                   value={formData.current_university}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    if (e.target.value !== 'Other') {
+                      setFormData((prev) => ({ ...prev, custom_university: '' }));
+                    }
+                  }}
                   required
                   className="w-full px-[16px] py-[9px] border border-black rounded-full bg-white focus:outline-none focus:border-nyu-purple text-[16px] appearance-none"
                 >
@@ -356,6 +377,20 @@ export default function SignUpPage() {
                   <option value="New School">New School</option>
                   <option value="Other">Other</option>
                 </select>
+                {formData.current_university === 'Other' && (
+                  <input
+                    type="text"
+                    name="custom_university"
+                    value={formData.custom_university || ''}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/[0-9]/g, '');
+                      setFormData((prev) => ({ ...prev, custom_university: val }));
+                    }}
+                    required
+                    placeholder="Enter your university name"
+                    className="w-full mt-[12px] px-[16px] py-[9px] border border-black rounded-full focus:outline-none focus:border-nyu-purple text-[16px]"
+                  />
+                )}
               </div>
 
               {/* Graduation Year */}
