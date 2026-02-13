@@ -10,6 +10,9 @@ import ProjectDetailPage from './pages/ProjectDetailPage';
 import ScrollToTop from './ScrollToTop';
 import AdminQR from './pages/AdminQR';
 import AdminUsers from './pages/AdminUsers';
+import CalendarPage from './pages/CalendarPage';
+import AdminCalendarPage from './pages/AdminCalendarPage';
+import EventsPage from './pages/EventsPage';
 
 function App() {
   return (
@@ -23,8 +26,11 @@ function App() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
+        <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/events" element={<EventsPage />} />
         <Route path="/admin/qr" element={<AdminQR />} />
         <Route path="/admin/users" element={<AdminUsers />} />
+        <Route path="/admin/calendar" element={<AdminCalendarPage />} />
       </Routes>
     </Router>
   );
