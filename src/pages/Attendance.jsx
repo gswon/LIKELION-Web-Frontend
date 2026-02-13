@@ -105,9 +105,6 @@ export default function AttendancePage() {
           <a href="#about" className="text-[20px] hover:text-nyu-purple">
             About Us
           </a>
-          <a href="#members" className="text-[20px] hover:text-nyu-purple">
-            Members
-          </a>
           <a href="#mentoring" className="text-[20px] hover:text-nyu-purple">
             Mentoring
           </a>
@@ -141,12 +138,12 @@ export default function AttendancePage() {
                   );
                 }}
               >
-                <a
-                  href="#events"
-                  className="block px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors"
+                <button
+                  onClick={() => navigate('/events')}
+                  className="block w-full text-left px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors bg-transparent border-none cursor-pointer"
                 >
                   Events
-                </a>
+                </button>
                 <a
                   href="#projects"
                   className="block px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors"
