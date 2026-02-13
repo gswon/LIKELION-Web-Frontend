@@ -19,7 +19,7 @@ export default function AdminPage() {
         <div className="flex items-center gap-[16px] ml-auto">
           <button
             onClick={() => navigate('/admin/qr')}
-            className="px-[28px] py-[13px] border border-gray-700 rounded-full 
+            className="px-[28px] py-[13px] border border-gray-700 rounded-full
             text-[20px] text-gray-300 hover:bg-[#2a2a2a]"
           >
             Attendance QR
@@ -27,15 +27,23 @@ export default function AdminPage() {
 
           <button
             onClick={() => navigate('/admin/users')}
-            className="px-[28px] py-[13px] border border-gray-700 rounded-full 
+            className="px-[28px] py-[13px] border border-gray-700 rounded-full
             text-[20px] text-gray-300 hover:bg-[#2a2a2a]"
           >
             User Management
           </button>
 
           <button
+            onClick={() => navigate('/admin/calendar')}
+            className="px-[28px] py-[13px] border border-gray-700 rounded-full
+            text-[20px] text-gray-300 hover:bg-[#2a2a2a]"
+          >
+            Calendar Management
+          </button>
+
+          <button
             onClick={() => navigate('/login')}
-            className="px-[28px] py-[13px] border border-gray-700 rounded-full 
+            className="px-[28px] py-[13px] border border-gray-700 rounded-full
             text-[20px] text-gray-300 hover:bg-[#2a2a2a]"
           >
             Log In
