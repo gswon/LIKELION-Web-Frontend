@@ -276,7 +276,7 @@ export default function LikeLionNYU() {
                       onMouseEnter={() => handleCardHover(globalIndex, true)}
                       onMouseLeave={() => handleCardHover(globalIndex, false)}
                       onClick={() => handleCardHover(globalIndex, !flippedCards.includes(globalIndex))}
-                      className="relative cursor-pointer mx-auto w-full max-w-[300px] md:max-w-none"
+                      className="relative cursor-pointer mx-auto w-full max-w-[280px] md:max-w-none"
                       style={{ perspective: '1000px', height: '400px' }}
                     >
                       <div
