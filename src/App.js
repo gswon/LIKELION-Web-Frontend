@@ -13,6 +13,7 @@ import AdminUsers from './pages/AdminUsers';
 import CalendarPage from './pages/CalendarPage';
 import AdminCalendarPage from './pages/AdminCalendarPage';
 import EventsPage from './pages/EventsPage';
+import AdminProjects from './pages/AdminProjects';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/admin/qr" element={<AdminQR />} />
         <Route path="/admin/users" element={<AdminUsers />} />
         <Route path="/admin/calendar" element={<AdminCalendarPage />} />
+        <Route path="/admin/projects" element={<AdminProjects />} />
       </Routes>
     </Router>
   );

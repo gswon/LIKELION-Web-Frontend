@@ -1,18 +1,15 @@
 // admin 가져오는 api
 // project에 대한 모든걸 가져오는 api
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NYULogo from '../NYU_logo.png';
 
 export default function LikeLionNYU() {
   const navigate = useNavigate();
-  const closeTimer = useRef(null);
   const [currentAdmin, setCurrentAdmin] = useState(0);
   const [currentCommunity, setCurrentCommunity] = useState(0);
   const [flippedCards, setFlippedCards] = useState([]);
-  const [showActivitiesMenu, setShowActivitiesMenu] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const admins = [
     {
@@ -79,13 +76,11 @@ export default function LikeLionNYU() {
   ];
 
   const nextAdmin = () => {
-    const step = window.innerWidth < 768 ? 1 : 4;
-    setCurrentAdmin((prev) => (prev + step >= admins.length ? prev : prev + step));
+    setCurrentAdmin((prev) => (prev + 4 >= admins.length ? prev : prev + 4));
   };
 
   const prevAdmin = () => {
-    const step = window.innerWidth < 768 ? 1 : 4;
-    setCurrentAdmin((prev) => (prev - step < 0 ? 0 : prev - step));
+    setCurrentAdmin((prev) => (prev - 4 < 0 ? 0 : prev - 4));
   };
 
   const nextCommunity = () => {
@@ -106,131 +101,61 @@ export default function LikeLionNYU() {
     }
   };
 
-  const adminCardsToShow = typeof window !== 'undefined' && window.innerWidth < 768 ? 1 : 4;
-
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="flex items-center w-full px-4 md:px-[32px] py-3 md:py-[16px] md:leading-normal bg-white relative">
+      <nav className="flex items-center w-full px-[32px] py-[16px] bg-white">
         <div
           onClick={() => navigate('/')}
-          className="flex items-center text-xl md:text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
+          className="flex items-center text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
         >
           LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
           <img
             src={NYULogo}
             alt="NYU Logo"
-            className="h-5 md:h-[32px] ml-[8px]"
+            className="h-[32px] ml-[8px]"
           />
         </div>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-[48px] bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto shadow-button">
+        <div className="flex items-center gap-[48px] bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto shadow-button">
           <a href="#about" className="text-[20px] hover:text-nyu-purple">
             About Us
           </a>
-          {/* hovering 했을때 events/project가 보이는 부분*/}
-          <div
-            className="relative"
-            onMouseEnter={() => {
-              if (closeTimer.current) clearTimeout(closeTimer.current);
-              setShowActivitiesMenu(true);
-            }}
-            onMouseLeave={() => {
-              closeTimer.current = setTimeout(
-                () => setShowActivitiesMenu(false),
-                400
-              );
-            }}
+          <button
+            onClick={() => navigate('/events')}
+            className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer"
           >
-            <a
-              href="#activities"
-              className="text-[20px] hover:text-nyu-purple cursor-pointer"
-            >
-              Activities
-            </a>
-
-            {showActivitiesMenu && (
-              <div
-                className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-black rounded-lg shadow-lg py-2 min-w-[120px] z-50"
-                onMouseEnter={() => {
-                  if (closeTimer.current) clearTimeout(closeTimer.current);
-                  setShowActivitiesMenu(true);
-                }}
-                onMouseLeave={() => {
-                  closeTimer.current = setTimeout(
-                    () => setShowActivitiesMenu(false),
-                    100
-                  );
-                }}
-              >
-                <button
-                  onClick={() => navigate('/events')}
-                  className="block w-full text-left px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors bg-transparent border-none cursor-pointer"
-                >
-                  Events
-                </button>
-                <button
-                  onClick={() => navigate('/projects')}
-                  className="block w-full text-left px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors bg-transparent border-none cursor-pointer"
-                >
-                  Projects
-                </button>
-              </div>
-            )}
-          </div>
+            Events
+          </button>
+          <button
+            onClick={() => navigate('/projects')}
+            className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer"
+          >
+            Projects
+          </button>
 
         </div>
 
         <button
           onClick={() => navigate('/login')}
-          className="hidden md:block px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px] shadow-button transition-all duration-200 hover:-translate-y-1 hover:shadow-hover"
+          className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px] shadow-button transition-all duration-200 hover:-translate-y-1 hover:shadow-hover"
         >
           Log In
         </button>
-
-        {/* Mobile Hamburger */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden ml-auto p-2"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {mobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
       </nav>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-gray-200 px-4 py-4 space-y-3">
-          <a href="#about" className="block text-lg hover:text-nyu-purple">About Us</a>
-          <button onClick={() => { navigate('/events'); setMobileMenuOpen(false); }} className="block w-full text-left text-lg hover:text-nyu-purple bg-transparent border-none cursor-pointer">Events</button>
-          <button onClick={() => { navigate('/projects'); setMobileMenuOpen(false); }} className="block w-full text-left text-lg hover:text-nyu-purple bg-transparent border-none cursor-pointer">Projects</button>
-          <button
-            onClick={() => { navigate('/login'); setMobileMenuOpen(false); }}
-            className="w-full px-4 py-2 border border-black rounded-full text-lg hover:bg-gray-50"
-          >
-            Log In
-          </button>
-        </div>
-      )}
-
       {/* Hero Section */}
-      <section className="text-center py-12 md:py-[100px] px-4 md:px-[16px]">
-        <h1 className="text-4xl sm:text-5xl md:text-[96px] md:leading-normal font-bold mb-8 md:mb-[60px] flex items-center justify-center">
-          LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
+      <section className="text-center py-[100px] px-[16px]">
+        <h1 className="text-[96px] font-bold mb-[60px] flex items-center justify-center">
+          LikeLion <span className="mx-[16px]">x</span> <span className="text-nyu-purple">NYU</span>
           <img
             src={NYULogo}
             alt="NYU Logo"
-            className="h-10 sm:h-14 md:h-[96px] ml-2 md:ml-[16px]"
+            className="h-[96px] ml-[16px]"
           />
         </h1>
 
-        <p className="max-w-[800px] mx-auto text-gray-600 leading-relaxed md:leading-relaxed mb-8 md:mb-[60px] text-sm md:text-base">
+        <p className="max-w-[800px] mx-auto text-gray-600 leading-relaxed mb-[60px]">
           Lorem Ipsum is simply dummy text of the printing and typesetting
           industry. Lorem Ipsum has been the industry's standard dummy text ever
           since the 1500s, when an unknown printer took a galley of type and
@@ -244,27 +169,27 @@ export default function LikeLionNYU() {
           href="https://linktr.ee/nyu_likelion?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnS1LXQBhcZAq5tVKjJlspGPGFoiBDd1QY-Ij6_uvyw8y6-_SoadTm2y4tcjI_aem_gcI0U_vmyQWrZxwiatd4Ag"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block px-[24px] py-[8px] border border-black rounded-full text-base md:text-[20px] md:leading-normal font-normal hover:bg-gray-100 mb-16 md:mb-[135px] shadow-button transition-all duration-200 hover:-translate-y-1 hover:shadow-hover"
+          className="inline-block px-[24px] py-[8px] border border-black rounded-full text-[20px] font-normal hover:bg-gray-100 mb-[135px] shadow-button transition-all duration-200 hover:-translate-y-1 hover:shadow-hover"
         >
           Join Us
         </a>
       </section>
 
       {/* Admin Section */}
-      <section className="bg-nyu-purple py-8 md:py-[45px] md:leading-normal px-4 md:px-[41px] text-white relative">
-        <h2 className="text-2xl md:text-[36px] text-center mb-6 md:mb-[30px] md:leading-normal">Meet Our Admin</h2>
+      <section className="bg-nyu-purple py-[45px] px-[41px] text-white relative">
+        <h2 className="text-[36px] text-center mb-[30px]">Meet Our Admin</h2>
 
         <div className="max-w-6xl mx-auto relative">
           <button
             onClick={prevAdmin}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-12 text-2xl md:text-[36px] hover:scale-110 transition-transform z-10"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 text-[36px] hover:scale-110 transition-transform"
           >
             ‹
           </button>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-[30px] px-8 md:px-0">
+          <div className="grid grid-cols-4 gap-[30px]">
             {admins
-              .slice(currentAdmin, currentAdmin + adminCardsToShow)
+              .slice(currentAdmin, currentAdmin + 4)
               .map((admin, index) => {
                 const globalIndex = currentAdmin + index;
                 return (
@@ -275,8 +200,7 @@ export default function LikeLionNYU() {
                     <div
                       onMouseEnter={() => handleCardHover(globalIndex, true)}
                       onMouseLeave={() => handleCardHover(globalIndex, false)}
-                      onClick={() => handleCardHover(globalIndex, !flippedCards.includes(globalIndex))}
-                      className="relative cursor-pointer mx-auto w-full max-w-[260px] md:max-w-none"
+                      className="relative cursor-pointer"
                       style={{ perspective: '1000px', height: '400px' }}
                     >
                       <div
@@ -323,13 +247,13 @@ export default function LikeLionNYU() {
 
           <button
             onClick={nextAdmin}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-12 text-2xl md:text-[36px] hover:scale-110 transition-transform z-10"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 text-[36px] hover:scale-110 transition-transform"
           >
             ›
           </button>
         </div>
 
-        <div className="text-center mt-8 md:mt-12">
+        <div className="text-center mt-12">
           <button className="bg-[#330662] px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-[#20043E] shadow-members transition-all duration-200 hover:-translate-y-1 hover:shadow-hover">
             Meet Our Members
           </button>
@@ -337,21 +261,21 @@ export default function LikeLionNYU() {
       </section>
 
       {/* Community Section */}
-      <section className="py-16 md:py-[140px] px-4 md:px-[16px] bg-gray-50">
+      <section className="py-[140px] px-[16px] bg-gray-50">
         <div className="max-w-4xl mx-auto relative">
           <button
-            onClick={prevCommunity}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-12 text-2xl md:text-[36px] hover:scale-110 transition-transform z-10"
+            onClick={prevAdmin}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 text-[36px] hover:scale-110 transition-transform"
           >
             ‹
           </button>
 
-          <div className="bg-black rounded-2xl md:rounded-[30px] p-6 md:p-[48px] text-white shadow-card mx-8 md:mx-0">
+          <div className="bg-black rounded-[30px] p-[48px] text-white shadow-card">
             <div className="text-center mb-6">
               <span className="inline-block bg-gray-800 px-4 py-1 rounded-full text-xs uppercase tracking-wider mb-4">
                 {communities[currentCommunity].team}
               </span>
-              <h2 className="text-2xl md:text-4xl font-bold mb-2">
+              <h2 className="text-4xl font-bold mb-2">
                 {communities[currentCommunity].title}
               </h2>
               <p className="text-gray-400 text-sm">
@@ -359,15 +283,15 @@ export default function LikeLionNYU() {
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl overflow-hidden mb-6 md:mb-8">
+            <div className="bg-white rounded-2xl overflow-hidden mb-8">
               <img
                 src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=400&fit=crop"
                 alt="NYU Community"
-                className="w-full h-40 md:h-64 object-cover"
+                className="w-full h-64 object-cover"
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            <div className="grid grid-cols-2 gap-8">
               <div>
                 <h3 className="text-yellow-400 text-xs uppercase tracking-wider mb-3">
                   TECH STACK
@@ -395,8 +319,8 @@ export default function LikeLionNYU() {
           </div>
 
           <button
-            onClick={nextCommunity}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-12 text-2xl md:text-[36px] hover:scale-110 transition-transform z-10"
+            onClick={nextAdmin}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 text-[36px] hover:scale-110 transition-transform"
           >
             ›
           </button>

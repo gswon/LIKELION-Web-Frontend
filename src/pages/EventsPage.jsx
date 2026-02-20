@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay, startOfMonth, endOfMonth, addMonths, subMonths } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -27,10 +27,6 @@ const eventCategories = {
 
 function EventsPage() {
   const navigate = useNavigate();
-  const closeTimer = useRef(null);
-  const [showActivitiesMenu, setShowActivitiesMenu] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -202,70 +198,53 @@ function EventsPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="flex items-center w-full px-4 md:px-[32px] py-3 md:py-[16px] bg-white">
+      <nav className="flex items-center w-full px-[32px] py-[16px] bg-white">
         <div
           onClick={() => navigate('/')}
-          className="flex items-center text-xl md:text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
+          className="flex items-center text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
         >
           LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
-          <img src={NYULogo} alt="NYU Logo" className="h-5 md:h-[32px] ml-[8px]" />
+          <img src={NYULogo} alt="NYU Logo" className="h-[32px] ml-[8px]" />
         </div>
 
-        <div className="hidden md:flex items-center gap-[48px] bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto shadow-button">
-          <a href="/#about" className="text-[20px] hover:text-nyu-purple">About Us</a>
-          <div
-            className="relative"
-            onMouseEnter={() => { if (closeTimer.current) clearTimeout(closeTimer.current); setShowActivitiesMenu(true); }}
-            onMouseLeave={() => { closeTimer.current = setTimeout(() => setShowActivitiesMenu(false), 400); }}
+        <div className="flex items-center gap-[48px] bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto shadow-button">
+          <a href="/#about" className="text-[20px] hover:text-nyu-purple">
+            About Us
+          </a>
+          <button
+            onClick={() => navigate('/events')}
+            className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer"
           >
-            <span className="text-[20px] hover:text-nyu-purple cursor-pointer">Activities</span>
-            {showActivitiesMenu && (
-              <div
-                className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-black rounded-lg shadow-lg py-2 min-w-[120px] z-50"
-                onMouseEnter={() => { if (closeTimer.current) clearTimeout(closeTimer.current); setShowActivitiesMenu(true); }}
-                onMouseLeave={() => { closeTimer.current = setTimeout(() => setShowActivitiesMenu(false), 100); }}
-              >
-                <button onClick={() => navigate('/events')} className="block w-full text-left px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors bg-transparent border-none cursor-pointer">Events</button>
-                <button onClick={() => navigate('/projects')} className="block w-full text-left px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors bg-transparent border-none cursor-pointer">Projects</button>
-              </div>
-            )}
-          </div>
+            Events
+          </button>
+          <button
+            onClick={() => navigate('/projects')}
+            className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer"
+          >
+            Projects
+          </button>
+
         </div>
 
-        <button onClick={() => navigate('/login')} className="hidden md:block px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 font-normal ml-[21px] shadow-button transition-all duration-200 hover:-translate-y-1 hover:shadow-hover">Log In</button>
-
-        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden ml-auto p-2">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {mobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
+        <button
+          onClick={() => navigate('/login')}
+          className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 font-normal ml-[21px] shadow-button transition-all duration-200 hover:-translate-y-1 hover:shadow-hover"
+        >
+          Log In
         </button>
       </nav>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-gray-200 px-4 py-4 space-y-3">
-          <a href="/#about" className="block text-lg hover:text-nyu-purple">About Us</a>
-          <button onClick={() => { navigate('/events'); setMobileMenuOpen(false); }} className="block w-full text-left text-lg hover:text-nyu-purple bg-transparent border-none cursor-pointer">Events</button>
-          <button onClick={() => { navigate('/projects'); setMobileMenuOpen(false); }} className="block w-full text-left text-lg hover:text-nyu-purple bg-transparent border-none cursor-pointer">Projects</button>
-          <button onClick={() => { navigate('/login'); setMobileMenuOpen(false); }} className="w-full px-4 py-2 border border-black rounded-full text-lg hover:bg-gray-50">Log In</button>
-        </div>
-      )}
-
       {/* Page Header */}
       <div className="bg-gradient-to-r from-nyu-purple to-purple-800 text-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl md:text-4xl font-bold">Events</h1>
-              <p className="text-purple-200 mt-1 md:mt-2 text-sm md:text-lg">멋쟁이사자처럼 NYU 일정을 확인하세요</p>
+              <h1 className="text-4xl font-bold">Events</h1>
+              <p className="text-purple-200 mt-2 text-lg">멋쟁이사자처럼 NYU 일정을 확인하세요</p>
             </div>
             <button
               onClick={openAddForm}
-              className="px-4 md:px-6 py-2 md:py-3 bg-ll-orange hover:bg-orange-600 text-white rounded-lg transition-all duration-200 font-semibold shadow-button hover:shadow-hover hover:-translate-y-1 self-start sm:self-auto text-sm md:text-base"
+              className="px-6 py-3 bg-ll-orange hover:bg-orange-600 text-white rounded-lg transition-all duration-200 font-semibold shadow-button hover:shadow-hover hover:-translate-y-1"
             >
               + 일정 추가
             </button>
@@ -301,7 +280,7 @@ function EventsPage() {
               events={events}
               startAccessor="start"
               endAccessor="end"
-              style={{ height: typeof window !== 'undefined' && window.innerWidth < 768 ? 450 : 700 }}
+              style={{ height: 700 }}
               eventPropGetter={eventStyleGetter}
               onSelectEvent={handleSelectEvent}
               onNavigate={handleNavigate}

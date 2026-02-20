@@ -1,12 +1,8 @@
-import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NYULogo from '../NYU_logo.png';
 
 export default function ProjectsPage() {
   const navigate = useNavigate();
-  const closeTimer = useRef(null);
-  const [showActivitiesMenu, setShowActivitiesMenu] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const studyTeams = [
     {
@@ -18,7 +14,7 @@ export default function ProjectsPage() {
       techStack: ['React', 'Node.js', 'OpenAI API', 'MongoDB'],
       status: 'In Progress',
       color: 'bg-blue-600',
-      category: 'study'
+      category: 'study',
     },
     {
       id: 'study-room-booking',
@@ -29,8 +25,8 @@ export default function ProjectsPage() {
       techStack: ['Angular', 'Django', 'MySQL'],
       status: 'Completed',
       color: 'bg-yellow-600',
-      category: 'study'
-    }
+      category: 'study',
+    },
   ];
 
   const projectTeams = [
@@ -43,7 +39,7 @@ export default function ProjectsPage() {
       techStack: ['React Native', 'Firebase', 'Google Maps API'],
       status: 'Planning',
       color: 'bg-green-600',
-      category: 'project'
+      category: 'project',
     },
     {
       id: 'event-management-system',
@@ -54,42 +50,42 @@ export default function ProjectsPage() {
       techStack: ['Vue.js', 'Express', 'PostgreSQL', 'Stripe API'],
       status: 'In Progress',
       color: 'bg-purple-600',
-      category: 'project'
-    }
+      category: 'project',
+    },
   ];
 
   const renderProjectCard = (project, index) => (
     <div
       key={index}
       onClick={() => navigate(`/projects/${project.id}`)}
-      className="bg-white border-2 border-gray-200 rounded-2xl md:rounded-[20px] p-5 md:p-[32px] md:leading-normal hover:border-nyu-purple hover:shadow-lg transition-all duration-300 cursor-pointer"
+      className="bg-white border-2 border-gray-200 rounded-[20px] p-[32px] hover:border-nyu-purple hover:shadow-lg transition-all duration-300 cursor-pointer"
     >
       {/* Project Header */}
-      <div className="flex items-start justify-between mb-4 md:mb-[20px] md:leading-normal">
+      <div className="flex items-start justify-between mb-[20px]">
         <div>
-          <h3 className="text-xl md:text-[28px] font-bold mb-1 md:mb-[8px] md:leading-normal">{project.name}</h3>
-          <p className="text-gray-600 text-sm md:text-[14px] md:leading-normal">{project.team}</p>
+          <h3 className="text-[28px] font-bold mb-[8px]">{project.name}</h3>
+          <p className="text-gray-600 text-[14px]">{project.team}</p>
         </div>
-        <span className={`${project.color} text-white px-3 md:px-[16px] py-1 md:py-[6px] md:leading-normal rounded-full text-xs md:text-[12px] font-semibold whitespace-nowrap ml-2`}>
+        <span className={`${project.color} text-white px-[16px] py-[6px] rounded-full text-[12px] font-semibold`}>
           {project.status}
         </span>
       </div>
 
       {/* Description */}
-      <p className="text-gray-700 leading-relaxed mb-4 md:mb-[24px] text-sm md:text-base md:leading-normal">
+      <p className="text-gray-700 leading-relaxed mb-[24px]">
         {project.description}
       </p>
 
       {/* Tech Stack */}
-      <div className="mb-4 md:mb-[20px]">
-        <h4 className="text-[12px] font-semibold text-gray-500 uppercase tracking-wider mb-2 md:leading-normal md:mb-[12px]">
+      <div className="mb-[20px]">
+        <h4 className="text-[12px] font-semibold text-gray-500 uppercase tracking-wider mb-[12px]">
           Tech Stack
         </h4>
-        <div className="flex flex-wrap gap-2 md:gap-[8px]">
+        <div className="flex flex-wrap gap-[8px]">
           {project.techStack.map((tech, i) => (
             <span
               key={i}
-              className="bg-gray-100 text-gray-700 px-3 md:px-[12px] py-1 md:py-[6px] md:leading-normal rounded-full text-xs md:text-[14px]"
+              className="bg-gray-100 text-gray-700 px-[12px] py-[6px] rounded-full text-[14px]"
             >
               {tech}
             </span>
@@ -99,14 +95,14 @@ export default function ProjectsPage() {
 
       {/* Team Members */}
       <div>
-        <h4 className="text-[12px] font-semibold text-gray-500 uppercase tracking-wider mb-2 md:mb-[12px] md:leading-normal">
+        <h4 className="text-[12px] font-semibold text-gray-500 uppercase tracking-wider mb-[12px]">
           Team Members ({project.members.length})
         </h4>
-        <div className="flex flex-wrap gap-2 md:gap-[8px]">
+        <div className="flex flex-wrap gap-[8px]">
           {project.members.map((member, i) => (
             <span
               key={i}
-              className="bg-nyu-purple bg-opacity-10 text-nyu-purple px-3 md:px-[12px] py-1 md:py-[6px] md:leading-normal rounded-full text-xs md:text-[14px] font-medium"
+              className="bg-nyu-purple bg-opacity-10 text-nyu-purple px-[12px] py-[6px] rounded-full text-[14px] font-medium"
             >
               {member}
             </span>
@@ -119,144 +115,72 @@ export default function ProjectsPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="flex items-center w-full px-4 md:px-[32px] py-3 md:py-[16px] bg-white">
+      <nav className="flex items-center w-full px-[32px] py-[16px] bg-white">
         <div
           onClick={() => navigate('/')}
-          className="flex items-center text-xl md:text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
+          className="flex items-center text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
         >
           LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
-          <img
-            src={NYULogo}
-            alt="NYU Logo"
-            className="h-5 md:h-[32px] ml-[8px]"
-          />
+          <img src={NYULogo} alt="NYU Logo" className="h-[32px] ml-[8px]" />
         </div>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-[48px] bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto shadow-button">
+        <div className="flex items-center gap-[48px] bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto shadow-button">
           <a href="/#about" className="text-[20px] hover:text-nyu-purple">
             About Us
           </a>
-          <div
-            className="relative"
-            onMouseEnter={() => {
-              if (closeTimer.current) clearTimeout(closeTimer.current);
-              setShowActivitiesMenu(true);
-            }}
-            onMouseLeave={() => {
-              closeTimer.current = setTimeout(
-                () => setShowActivitiesMenu(false),
-                400
-              );
-            }}
+          <button
+            onClick={() => navigate('/events')}
+            className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer"
           >
-            <a
-              href="#activities"
-              className="text-[20px] hover:text-nyu-purple cursor-pointer"
-            >
-              Activities
-            </a>
-
-            {showActivitiesMenu && (
-              <div
-                className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-black rounded-lg shadow-lg py-2 min-w-[120px] z-50"
-                onMouseEnter={() => {
-                  if (closeTimer.current) clearTimeout(closeTimer.current);
-                  setShowActivitiesMenu(true);
-                }}
-                onMouseLeave={() => {
-                  closeTimer.current = setTimeout(
-                    () => setShowActivitiesMenu(false),
-                    100
-                  );
-                }}
-              >
-                <button
-                  onClick={() => navigate('/events')}
-                  className="block w-full text-left px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors bg-transparent border-none cursor-pointer"
-                >
-                  Events
-                </button>
-                <button
-                  onClick={() => navigate('/projects')}
-                  className="block w-full text-left px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors bg-transparent border-none cursor-pointer"
-                >
-                  Projects
-                </button>
-              </div>
-            )}
-          </div>
-
+            Events
+          </button>
+          <button
+            onClick={() => navigate('/projects')}
+            className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer"
+          >
+            Projects
+          </button>
         </div>
 
         <button
           onClick={() => navigate('/login')}
-          className="hidden md:block px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px] shadow-button transition-all duration-200 hover:-translate-y-1 hover:shadow-hover"
+          className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px] shadow-button transition-all duration-200 hover:-translate-y-1 hover:shadow-hover"
         >
           Log In
         </button>
-
-        {/* Mobile Hamburger */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden ml-auto p-2"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {mobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
       </nav>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-gray-200 px-4 py-4 space-y-3">
-          <a href="/#about" className="block text-lg hover:text-nyu-purple">About Us</a>
-          <button onClick={() => { navigate('/events'); setMobileMenuOpen(false); }} className="block w-full text-left text-lg hover:text-nyu-purple bg-transparent border-none cursor-pointer">Events</button>
-          <button onClick={() => { navigate('/projects'); setMobileMenuOpen(false); }} className="block w-full text-left text-lg hover:text-nyu-purple bg-transparent border-none cursor-pointer">Projects</button>
-          <button
-            onClick={() => { navigate('/login'); setMobileMenuOpen(false); }}
-            className="w-full px-4 py-2 border border-black rounded-full text-lg hover:bg-gray-50"
-          >
-            Log In
-          </button>
-        </div>
-      )}
-
       {/* Header Section */}
-      <section className="py-10 md:py-[60px] px-4 md:px-[16px] bg-white">
+      <section className="py-[60px] px-[16px] bg-white">
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-3xl md:text-[64px] md:leading-normal font-bold mb-4 md:mb-[24px]">
+          <h1 className="text-[64px] font-bold mb-[24px]">
             Our <span className="text-nyu-purple">Teams</span>
           </h1>
-          <p className="text-gray-600 text-base md:text-[20px] md:leading-normal mb-6 md:mb-[40px] max-w-2xl mx-auto">
+          <p className="text-gray-600 text-[20px] mb-[40px] max-w-2xl mx-auto">
             Explore the innovative projects our talented teams are working on. From AI-powered solutions to campus management tools, we're building the future together.
           </p>
         </div>
       </section>
 
       {/* Study Teams Section */}
-      <section className="py-10 md:py-[60px] md:leading-normal px-4 md:px-[16px] bg-gray-50">
+      <section className="py-[60px] px-[16px] bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl md:text-[48px] md:leading-normal font-bold mb-6 md:mb-[48px]">
+          <h2 className="text-[48px] font-bold mb-[48px]">
             <span className="text-nyu-purple">Study</span> Teams
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-[40px] md:leading-normal">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-[40px]">
             {studyTeams.map((project, index) => renderProjectCard(project, index))}
           </div>
         </div>
       </section>
 
       {/* Project Teams Section */}
-      <section className="py-10 md:py-[60px] md:leading-normal px-4 md:px-[16px] bg-white">
+      <section className="py-[60px] px-[16px] bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl md:text-[48px] md:leading-normal font-bold mb-6 md:mb-[48px]">
+          <h2 className="text-[48px] font-bold mb-[48px]">
             <span className="text-nyu-purple">Project</span> Teams
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-[40px]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-[40px]">
             {projectTeams.map((project, index) => renderProjectCard(project, index))}
           </div>
         </div>

@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import NYULogo from '../NYU_logo.png';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -10,10 +11,6 @@ export default function LoginPage() {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-
-  const [showActivitiesMenu, setShowActivitiesMenu] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const closeTimer = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,121 +62,58 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="flex items-center w-full px-4 md:px-[32px] py-3 md:py-[16px] bg-white">
+      <nav className="flex items-center w-full px-[32px] py-[16px] bg-white">
         <div
           onClick={() => navigate('/')}
-          className="flex text-xl md:text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
+          className="flex items-center text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
         >
           LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
+          <img src={NYULogo} alt="NYU Logo" className="h-[32px] ml-[8px]" />
         </div>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-[48px] bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto">
+        <div className="flex items-center gap-[48px] bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto">
           <a href="#about" className="text-[20px] hover:text-nyu-purple">
             About Us
           </a>
-          {/* Activities Hover Menu */}
-          <div
-            className="relative"
-            onMouseEnter={() => {
-              if (closeTimer.current) clearTimeout(closeTimer.current);
-              setShowActivitiesMenu(true);
-            }}
-            onMouseLeave={() => {
-              closeTimer.current = setTimeout(
-                () => setShowActivitiesMenu(false),
-                100
-              );
-            }}
+          <button
+            onClick={() => navigate('/events')}
+            className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer"
           >
-            <span className="text-[20px] hover:text-nyu-purple cursor-pointer">
-              Activities
-            </span>
-
-            {showActivitiesMenu && (
-              <div
-                className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-black rounded-lg shadow-lg py-2 min-w-[120px] z-50"
-                onMouseEnter={() => {
-                  if (closeTimer.current) clearTimeout(closeTimer.current);
-                }}
-                onMouseLeave={() => {
-                  closeTimer.current = setTimeout(
-                    () => setShowActivitiesMenu(false),
-                    400
-                  );
-                }}
-              >
-                <button
-                  onClick={() => navigate('/events')}
-                  className="block w-full text-left px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors bg-transparent border-none cursor-pointer"
-                >
-                  Events
-                </button>
-                <a
-                  href="#projects"
-                  className="block px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors"
-                >
-                  Projects
-                </a>
-              </div>
-            )}
-          </div>
+            Events
+          </button>
+          <button
+            onClick={() => navigate('/projects')}
+            className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer"
+          >
+            Projects
+          </button>
 
         </div>
 
         <button
           onClick={() => navigate('/login')}
-          className="hidden md:block px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px]"
+          className="px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px]"
         >
           Log In
         </button>
-
-        {/* Mobile Hamburger */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden ml-auto p-2"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {mobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
       </nav>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-gray-200 px-4 py-4 space-y-3">
-          <a href="#about" className="block text-lg hover:text-nyu-purple">About Us</a>
-          <button onClick={() => { navigate('/events'); setMobileMenuOpen(false); }} className="block w-full text-left text-lg hover:text-nyu-purple bg-transparent border-none cursor-pointer">Events</button>
-          <button onClick={() => { navigate('/projects'); setMobileMenuOpen(false); }} className="block w-full text-left text-lg hover:text-nyu-purple bg-transparent border-none cursor-pointer">Projects</button>
-          <button
-            onClick={() => { navigate('/login'); setMobileMenuOpen(false); }}
-            className="w-full px-4 py-2 border border-black rounded-full text-lg hover:bg-gray-50"
-          >
-            Log In
-          </button>
-        </div>
-      )}
-
       {/* Main Content */}
-      <div className="px-4 md:px-[32px] py-8 md:py-[48px]">
-        <h1 className="text-3xl md:text-[64px] font-bold mb-6 md:mb-[48px] md:leading-normal">Log In</h1>
+      <div className="px-[32px] py-[48px]">
+        <h1 className="text-[64px] font-bold mb-[48px]">Log In</h1>
 
         <div className="max-w-xl mx-auto">
-          <div className="bg-white border border-black rounded-3xl md:rounded-[50px] px-6 sm:px-10 md:px-[72px] pt-6 md:pt-[30px] pb-8 md:pb-[43px] md:leading-normal">
+          <div className="bg-white border border-black rounded-[50px] px-[72px] pt-[30px] pb-[43px]">
             {/* Title */}
-            <h2 className="text-2xl sm:text-3xl md:text-[48px] md:leading-normal font-bold text-center mb-6 md:mb-[48px]">
+            <h2 className="text-[48px] font-bold text-center mb-[48px]">
               LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
             </h2>
 
             {/* Form */}
-            <div className="space-y-4 md:space-y-[16px] md:leading-normal">
+            <div className="space-y-[16px]">
               {/* Email */}
               <div>
-                <label className="block text-base md:text-[20px] md:leading-normal font-bold mb-2 md:mb-[12px]">
+                <label className="block text-[20px] font-bold mb-[12px]">
                   Email:
                 </label>
                 <input
@@ -187,13 +121,13 @@ export default function LoginPage() {
                   name="school_email"
                   value={formData.school_email}
                   onChange={handleChange}
-                  className="w-full px-4 md:px-[16px] py-2 md:py-[9px] border border-black rounded-full focus:outline-none focus:border-nyu-purple text-[16px]"
+                  className="w-full px-[16px] py-[9px] border border-black rounded-full focus:outline-none focus:border-nyu-purple text-[16px]"
                 />
               </div>
 
               {/* Password */}
               <div>
-                <label className="block text-base md:text-[20px] md:leading-normal font-semibold mb-2 md:mb-[12px]">
+                <label className="block text-lg font-semibold mb-[12px]">
                   Password:
                 </label>
                 <input
@@ -201,23 +135,23 @@ export default function LoginPage() {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full px-4 md:px-[16px] py-2 md:py-[9px] border border-black rounded-full focus:outline-none focus:border-nyu-purple text-[16px]"
+                  className="w-full px-[16px] py-[9px] border border-black rounded-full focus:outline-none focus:border-nyu-purple text-[16px]"
                 />
               </div>
 
               {/* Login Button */}
-              <div className="flex justify-center pt-6 md:pt-[30px]">
+              <div className="flex justify-center pt-[30px]">
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="px-6 md:px-[24px] py-2 md:py-[8px] md:leading-normal border border-black rounded-full text-base md:text-[20px] font-normal hover:bg-gray-100 disabled:bg-gray-200 disabled:cursor-not-allowed transition-colors"
+                  className="px-[24px] py-[8px] border border-black rounded-full text-[20px] font-normal hover:bg-gray-100 disabled:bg-gray-200 disabled:cursor-not-allowed transition-colors"
                 >
                   {loading ? 'Logging in...' : 'Log In'}
                 </button>
               </div>
 
               {/* Sign Up Link */}
-              <div className="text-center pt-4 md:pt-[25px]">
+              <div className="text-center pt-[25px]">
                 <p className="text-[14px]">
                   Don't have an account?{' '}
                   <span
@@ -232,7 +166,7 @@ export default function LoginPage() {
               {/* Message */}
               {message && (
                 <div
-                  className={`text-center py-3 md:py-[12px] px-4 md:px-[16px] rounded-full text-sm md:text-base ${
+                  className={`text-center py-[12px] px-[16px] rounded-full ${
                     message.includes('Success')
                       ? 'bg-green-100 text-green-800'
                       : 'bg-red-100 text-red-800'
