@@ -3,7 +3,6 @@ import QRCode from 'qrcode';
 import AdminNav from '../components/AdminNav';
 
 export default function AdminQR() {
-
   const [meetingNumber, setMeetingNumber] = useState('');
   const [qrImage, setQrImage] = useState('');
   const [status, setStatus] = useState('');
@@ -19,12 +18,12 @@ export default function AdminQR() {
     try {
       // 백엔드 API 호출
       const res = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/qr-create?meeting_number=${meetingNumber}`
+        `${process.env.REACT_APP_API_URL}/api/qr-create?meeting_number=${meetingNumber}`,
       );
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
 
       // QR 안에 들어갈 실제 URL
-      const qrData = `${window.location.origin}/attendance?meeting=${meetingNumber}`;
+      const qrData = `${window.location.origin}/attendance?meeting_number=${meetingNumber}`;
 
       // QR 이미지 생성
       const qrImageData = await QRCode.toDataURL(qrData, {
