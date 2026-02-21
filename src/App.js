@@ -15,6 +15,7 @@ import AdminCalendarPage from './pages/AdminCalendarPage';
 import EventsPage from './pages/EventsPage';
 import AdminProjects from './pages/AdminProjects';
 import AdminAttendance from './pages/AdminAttendance';
+import AdminRoute from './components/AdminRoute';
 
 function App() {
   return (
@@ -25,16 +26,16 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/attendance" element={<AttendancePage />} />
-        <Route path="/admin" element={<AdminPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/events" element={<EventsPage />} />
-        <Route path="/admin/qr" element={<AdminQR />} />
-        <Route path="/admin/users" element={<AdminUsers />} />
-        <Route path="/admin/calendar" element={<AdminCalendarPage />} />
-        <Route path="/admin/projects" element={<AdminProjects />} />
-        <Route path="/admin/attendance" element={<AdminAttendance />} />
+        <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
+        <Route path="/admin/qr" element={<AdminRoute><AdminQR /></AdminRoute>} />
+        <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
+        <Route path="/admin/calendar" element={<AdminRoute><AdminCalendarPage /></AdminRoute>} />
+        <Route path="/admin/projects" element={<AdminRoute><AdminProjects /></AdminRoute>} />
+        <Route path="/admin/attendance" element={<AdminRoute><AdminAttendance /></AdminRoute>} />
       </Routes>
     </Router>
   );

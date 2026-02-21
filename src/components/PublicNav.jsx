@@ -6,6 +6,17 @@ export default function PublicNav() {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const isLoggedIn = !!localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const isAdmin = !!user.is_admin;
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setMobileOpen(false);
+    navigate('/');
+  };
+
   return (
     <nav className="relative flex items-center w-full px-4 md:px-6 lg:px-[32px] py-[14px] lg:py-[16px] bg-white">
       {/* Logo - scales gradually across all breakpoints */}
@@ -39,14 +50,22 @@ export default function PublicNav() {
         >
           Projects
         </button>
+        {isAdmin && (
+          <button
+            onClick={() => navigate('/admin')}
+            className="text-[12px] lg:text-[15px] xl:text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer whitespace-nowrap"
+          >
+            Admin
+          </button>
+        )}
       </div>
 
-      {/* Login button - visible from md up, scales between breakpoints */}
+      {/* Login/Logout button - visible from md up, scales between breakpoints */}
       <button
-        onClick={() => navigate('/login')}
+        onClick={isLoggedIn ? handleLogout : () => navigate('/login')}
         className="hidden md:block px-[12px] lg:px-[20px] xl:px-[28px] py-[7px] lg:py-[10px] xl:py-[13px] border border-black rounded-full text-[12px] lg:text-[15px] xl:text-[20px] hover:bg-gray-50 font-normal ml-[8px] lg:ml-[14px] xl:ml-[21px] shadow-button transition-all duration-200 hover:-translate-y-1 hover:shadow-hover whitespace-nowrap shrink-0"
       >
-        Log In
+        {isLoggedIn ? 'Log Out' : 'Log In'}
       </button>
 
       {/* Mobile hamburger - EXPLICITLY shown below md using flex md:hidden */}
@@ -82,11 +101,19 @@ export default function PublicNav() {
           >
             Projects
           </button>
+          {isAdmin && (
+            <button
+              onClick={() => { navigate('/admin'); setMobileOpen(false); }}
+              className="text-left px-[16px] py-[12px] rounded-[10px] text-[16px] text-gray-800 hover:bg-gray-100"
+            >
+              Admin
+            </button>
+          )}
           <button
-            onClick={() => { navigate('/login'); setMobileOpen(false); }}
+            onClick={isLoggedIn ? handleLogout : () => { navigate('/login'); setMobileOpen(false); }}
             className="text-left px-[16px] py-[12px] rounded-[10px] text-[16px] text-gray-800 hover:bg-gray-100 border-t border-gray-100 mt-1 pt-[13px]"
           >
-            Log In
+            {isLoggedIn ? 'Log Out' : 'Log In'}
           </button>
         </div>
       )}

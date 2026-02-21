@@ -43,6 +43,10 @@ export default function LoginPage() {
         setMessage('Login Successful!');
         console.log('서버 응답:', result);
 
+        // 토큰과 유저 정보 저장
+        localStorage.setItem('token', result.firebase.idToken);
+        localStorage.setItem('user', JSON.stringify(result.supabase));
+
         // 로그인 성공 후 LandingPage로 이동
         setTimeout(() => {
           navigate('/');

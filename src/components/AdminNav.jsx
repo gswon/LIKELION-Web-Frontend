@@ -100,12 +100,12 @@ export default function AdminNav() {
           )}
         </div>
 
-        {/* Log In */}
+        {/* Go to Site */}
         <button
-          onClick={() => navigate('/login')}
+          onClick={() => navigate('/')}
           className={inactiveClass}
         >
-          Log In
+          Go to Site
         </button>
       </div>
 
@@ -161,10 +161,10 @@ export default function AdminNav() {
             Project Management
           </button>
           <button
-            onClick={() => { navigate('/login'); setMobileOpen(false); }}
-            className="text-left px-[16px] py-[12px] rounded-[10px] text-[16px] text-gray-300 hover:bg-[#2a2a2a]"
+            onClick={() => { navigate('/'); setMobileOpen(false); }}
+            className="text-left px-[16px] py-[12px] rounded-[10px] text-[16px] text-gray-300 hover:bg-[#2a2a2a] border-t border-gray-800 mt-1 pt-[13px]"
           >
-            Log In
+            Go to Site
           </button>
         </div>
       )}
