@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
-import { format, parse, startOfWeek, getDay } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { format, parse, startOfWeek, getDay, startOfMonth, endOfMonth, addMonths, subMonths } from 'date-fns';
+import { enUS } from 'date-fns/locale';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import AdminNav from '../components/AdminNav';
 
-const locales = {
-  'ko': ko,
-};
+const locales = { 'en-US': enUS };
 
 const localizer = dateFnsLocalizer({
   format,
@@ -18,17 +16,19 @@ const localizer = dateFnsLocalizer({
 });
 
 const eventCategories = {
-  '아이디어톤': { color: '#FF6000', bgColor: '#FFF4ED' },
-  '프로젝트 미팅': { color: '#57068c', bgColor: '#F3E8FF' },
-  '스터디': { color: '#059669', bgColor: '#D1FAE5' },
-  'GM': { color: '#DC2626', bgColor: '#FEE2E2' },
-  '회식': { color: '#2563EB', bgColor: '#DBEAFE' },
-  '세션': { color: '#9333EA', bgColor: '#F3E8FF' }
+  'Ideathon':       { color: '#FF6000', bgColor: '#FFF4ED' },
+  'Project Meeting':{ color: '#57068c', bgColor: '#F3E8FF' },
+  'Study':          { color: '#059669', bgColor: '#D1FAE5' },
+  'GM':             { color: '#DC2626', bgColor: '#FEE2E2' },
+  'Team Dinner':    { color: '#2563EB', bgColor: '#DBEAFE' },
+  'Session':        { color: '#9333EA', bgColor: '#F3E8FF' },
 };
 
 function AdminCalendarPage() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentView, setCurrentView] = useState('month');
   const [showEventModal, setShowEventModal] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -38,17 +38,17 @@ function AdminCalendarPage() {
 
   const [formData, setFormData] = useState({
     title: '',
-    category: '아이디어톤',
+    category: 'Ideathon',
     start_date: '',
     end_date: '',
     location: '',
     description: '',
-    attendees: ''
+    attendees: '',
   });
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    fetchEvents(currentDate);
+  }, [currentDate]);
 
   useEffect(() => {
     const handleResize = () => setCalHeight(window.innerWidth < 768 ? 450 : 700);
@@ -58,33 +58,34 @@ function AdminCalendarPage() {
 
   useEffect(() => {
     if (showSuccessPopup) {
-      const timer = setTimeout(() => {
-        setShowSuccessPopup(false);
-      }, 3000);
+      const timer = setTimeout(() => setShowSuccessPopup(false), 3000);
       return () => clearTimeout(timer);
     }
   }, [showSuccessPopup]);
 
-  const fetchEvents = async () => {
+  const fetchEvents = async (date) => {
     try {
       setLoading(true);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/calendar/events`);
+      const monthStart = format(startOfMonth(subMonths(date, 1)), 'yyyy-MM-dd');
+      const monthEnd = format(endOfMonth(addMonths(date, 1)), 'yyyy-MM-dd');
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch events');
-      }
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/events?start=${monthStart}&end=${monthEnd}`
+      );
+
+      if (!response.ok) throw new Error('Failed to fetch events');
 
       const data = await response.json();
 
-      const transformedEvents = data.map(event => ({
+      const transformedEvents = (data.events || []).map(event => ({
         id: event.event_id,
-        title: event.title,
+        title: event.event_title,
         start: new Date(event.start_date),
         end: new Date(event.end_date),
         category: event.category,
         location: event.location,
         description: event.description,
-        attendees: event.attendees || []
+        is_public: event.is_public,
       }));
 
       setEvents(transformedEvents);
@@ -97,7 +98,6 @@ function AdminCalendarPage() {
 
   const eventStyleGetter = (event) => {
     const categoryStyle = eventCategories[event.category] || { color: '#000', bgColor: '#FFF' };
-
     return {
       style: {
         backgroundColor: categoryStyle.bgColor,
@@ -106,8 +106,8 @@ function AdminCalendarPage() {
         borderRadius: '4px',
         padding: '2px 5px',
         fontSize: '0.875rem',
-        fontWeight: '500'
-      }
+        fontWeight: '500',
+      },
     };
   };
 
@@ -121,7 +121,7 @@ function AdminCalendarPage() {
       end_date: format(event.end, "yyyy-MM-dd'T'HH:mm"),
       location: event.location || '',
       description: event.description || '',
-      attendees: Array.isArray(event.attendees) ? event.attendees.join(', ') : ''
+      attendees: Array.isArray(event.attendees) ? event.attendees.join(', ') : '',
     });
     setShowEventModal(true);
   };
@@ -131,88 +131,74 @@ function AdminCalendarPage() {
     setSelectedEvent(null);
     setFormData({
       title: '',
-      category: '아이디어톤',
+      category: 'Ideathon',
       start_date: '',
       end_date: '',
       location: '',
       description: '',
-      attendees: ''
+      attendees: '',
     });
     setShowEventModal(true);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const eventData = {
-      title: formData.title,
+      event_title: formData.title,
       category: formData.category,
       start_date: formData.start_date,
       end_date: formData.end_date,
       location: formData.location,
       description: formData.description,
-      attendees: formData.attendees.split(',').map(a => a.trim()).filter(a => a)
     };
 
     try {
       const url = isEditMode
-        ? `${process.env.REACT_APP_API_URL}/api/calendar/events/${selectedEvent.id}`
-        : `${process.env.REACT_APP_API_URL}/api/calendar/events`;
+        ? `${process.env.REACT_APP_API_URL}/api/events/${selectedEvent.id}`
+        : `${process.env.REACT_APP_API_URL}/api/events`;
 
       const response = await fetch(url, {
         method: isEditMode ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(eventData),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to save event');
-      }
+      if (!response.ok) throw new Error('Failed to save event');
 
-      setSuccessMessage(isEditMode ? '일정이 수정되었습니다!' : '일정이 추가되었습니다!');
+      setSuccessMessage(isEditMode ? 'Event updated successfully!' : 'Event added successfully!');
       setShowSuccessPopup(true);
       setShowEventModal(false);
-      fetchEvents();
+      fetchEvents(currentDate);
     } catch (error) {
       console.error('Error saving event:', error);
-      alert('일정 저장 중 오류가 발생했습니다.');
+      alert('An error occurred while saving the event.');
     }
   };
 
   const handleDeleteEvent = async () => {
-    if (!window.confirm('정말로 이 일정을 삭제하시겠습니까?')) {
-      return;
-    }
+    if (!window.confirm('Are you sure you want to delete this event?')) return;
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/calendar/events/${selectedEvent.id}`,
-        {
-          method: 'DELETE',
-        }
+        `${process.env.REACT_APP_API_URL}/api/events/${selectedEvent.id}`,
+        { method: 'DELETE' }
       );
 
-      if (!response.ok) {
-        throw new Error('Failed to delete event');
-      }
+      if (!response.ok) throw new Error('Failed to delete event');
 
-      setSuccessMessage('일정이 삭제되었습니다!');
+      setSuccessMessage('Event deleted successfully!');
       setShowSuccessPopup(true);
       setShowEventModal(false);
-      fetchEvents();
+      fetchEvents(currentDate);
     } catch (error) {
       console.error('Error deleting event:', error);
-      alert('일정 삭제 중 오류가 발생했습니다.');
+      alert('An error occurred while deleting the event.');
     }
   };
 
@@ -232,21 +218,18 @@ function AdminCalendarPage() {
           onClick={handleAddEvent}
           className="px-[28px] py-[13px] bg-nyu-purple text-white rounded-full text-[20px] hover:opacity-80 transition-opacity"
         >
-          + 일정 추가
+          + Add Event
         </button>
       </div>
 
       {/* Category Legend */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
         <div className="bg-[#1a1a1a] border border-gray-800 rounded-lg p-4">
-          <h3 className="text-white font-semibold mb-3">카테고리</h3>
+          <h3 className="text-white font-semibold mb-3">Categories</h3>
           <div className="flex flex-wrap gap-4">
             {Object.entries(eventCategories).map(([category, style]) => (
               <div key={category} className="flex items-center gap-2">
-                <div
-                  className="w-4 h-4 rounded"
-                  style={{ backgroundColor: style.color }}
-                />
+                <div className="w-4 h-4 rounded" style={{ backgroundColor: style.color }} />
                 <span className="text-white text-sm">{category}</span>
               </div>
             ))}
@@ -259,7 +242,7 @@ function AdminCalendarPage() {
         <div className="bg-white rounded-lg shadow-card p-6">
           {loading ? (
             <div className="flex justify-center items-center h-96">
-              <div className="text-nyu-purple text-xl">로딩 중...</div>
+              <div className="text-nyu-purple text-xl">Loading...</div>
             </div>
           ) : (
             <Calendar
@@ -270,20 +253,24 @@ function AdminCalendarPage() {
               style={{ height: calHeight }}
               eventPropGetter={eventStyleGetter}
               onSelectEvent={handleSelectEvent}
-              culture="ko"
+              onNavigate={(date) => setCurrentDate(date)}
+              date={currentDate}
+              view={currentView}
+              onView={(view) => setCurrentView(view)}
+              culture="en-US"
               messages={{
-                next: "다음",
-                previous: "이전",
-                today: "오늘",
-                month: "월",
-                week: "주",
-                day: "일",
-                agenda: "일정",
-                date: "날짜",
-                time: "시간",
-                event: "이벤트",
-                noEventsInRange: "해당 기간에 일정이 없습니다.",
-                showMore: (total) => `+${total} 더보기`
+                next: 'Next',
+                previous: 'Back',
+                today: 'Today',
+                month: 'Month',
+                week: 'Week',
+                day: 'Day',
+                agenda: 'Agenda',
+                date: 'Date',
+                time: 'Time',
+                event: 'Event',
+                noEventsInRange: 'No events in this period.',
+                showMore: (total) => `+${total} more`,
               }}
             />
           )}
@@ -297,12 +284,9 @@ function AdminCalendarPage() {
             <div className="p-6 border-b border-gray-200">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-gray-900">
-                  {isEditMode ? '일정 수정' : '일정 추가'}
+                  {isEditMode ? 'Edit Event' : 'Add Event'}
                 </h2>
-                <button
-                  onClick={closeEventModal}
-                  className="text-gray-400 hover:text-gray-600 text-2xl"
-                >
+                <button onClick={closeEventModal} className="text-gray-400 hover:text-gray-600 text-2xl">
                   ×
                 </button>
               </div>
@@ -310,9 +294,7 @@ function AdminCalendarPage() {
 
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  제목 *
-                </label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Title *</label>
                 <input
                   type="text"
                   name="title"
@@ -320,14 +302,12 @@ function AdminCalendarPage() {
                   onChange={handleInputChange}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nyu-purple focus:border-transparent"
-                  placeholder="일정 제목을 입력하세요"
+                  placeholder="Enter event title"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  카테고리 *
-                </label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Category *</label>
                 <select
                   name="category"
                   value={formData.category}
@@ -336,18 +316,14 @@ function AdminCalendarPage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nyu-purple focus:border-transparent"
                 >
                   {Object.keys(eventCategories).map(category => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
+                    <option key={category} value={category}>{category}</option>
                   ))}
                 </select>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    시작 일시 *
-                  </label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Start Date & Time *</label>
                   <input
                     type="datetime-local"
                     name="start_date"
@@ -357,11 +333,8 @@ function AdminCalendarPage() {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nyu-purple focus:border-transparent"
                   />
                 </div>
-
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    종료 일시 *
-                  </label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">End Date & Time *</label>
                   <input
                     type="datetime-local"
                     name="end_date"
@@ -374,48 +347,40 @@ function AdminCalendarPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  장소
-                </label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Location</label>
                 <input
                   type="text"
                   name="location"
                   value={formData.location}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nyu-purple focus:border-transparent"
-                  placeholder="예: NYU 학생회관 3층 / Zoom 링크"
+                  placeholder="e.g. NYU Student Center 3F / Zoom link"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  설명 / 메모
-                </label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Description / Notes</label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleInputChange}
                   rows="4"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nyu-purple focus:border-transparent"
-                  placeholder="일정에 대한 상세 설명을 입력하세요"
+                  placeholder="Enter event details"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  참석자
-                </label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Attendees</label>
                 <input
                   type="text"
                   name="attendees"
                   value={formData.attendees}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nyu-purple focus:border-transparent"
-                  placeholder="참석자 이름을 쉼표로 구분하여 입력 (예: 홍길동, 김철수, 이영희)"
+                  placeholder="Enter attendee names separated by commas"
                 />
-                <p className="text-sm text-gray-500 mt-1">
-                  쉼표(,)로 구분하여 여러 명의 참석자를 입력할 수 있습니다.
-                </p>
+                <p className="text-sm text-gray-500 mt-1">Separate multiple attendees with commas.</p>
               </div>
 
               <div className="flex gap-3 pt-4 border-t">
@@ -425,21 +390,21 @@ function AdminCalendarPage() {
                     onClick={handleDeleteEvent}
                     className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-200 font-semibold"
                   >
-                    삭제
+                    Delete
                   </button>
                 )}
                 <button
                   type="submit"
                   className="flex-1 py-3 bg-nyu-purple hover:bg-purple-800 text-white rounded-lg transition-colors duration-200 font-semibold"
                 >
-                  {isEditMode ? '수정 완료' : '일정 추가'}
+                  {isEditMode ? 'Save Changes' : 'Add Event'}
                 </button>
                 <button
                   type="button"
                   onClick={closeEventModal}
                   className="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-colors duration-200 font-semibold"
                 >
-                  취소
+                  Cancel
                 </button>
               </div>
             </form>
@@ -449,7 +414,7 @@ function AdminCalendarPage() {
 
       {/* Success Popup */}
       {showSuccessPopup && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 animate-fade-in">
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50">
           <div className="flex items-center gap-3">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

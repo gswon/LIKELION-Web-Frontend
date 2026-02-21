@@ -28,7 +28,6 @@ function App() {
         <Route path="/attendance" element={<AttendancePage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
-        <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/events" element={<EventsPage />} />
         <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
         <Route path="/admin/qr" element={<AdminRoute><AdminQR /></AdminRoute>} />

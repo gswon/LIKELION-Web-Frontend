@@ -230,11 +230,7 @@ export default function LikeLionNYU() {
           </button>
         </div>
 
-        <div className="text-center mt-12">
-          <button className="bg-[#330662] px-[28px] py-[13px] border border-black rounded-full text-[18px] md:text-[20px] hover:bg-[#20043E] shadow-members transition-all duration-200 hover:-translate-y-1 hover:shadow-hover leading-normal md:leading-normal">
-            Meet Our Members
-          </button>
-        </div>
+
       </section>
 
       {/* Community Section */}

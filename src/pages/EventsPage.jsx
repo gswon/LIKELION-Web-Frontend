@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay, startOfMonth, endOfMonth, addMonths, subMonths } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import PublicNav from '../components/PublicNav';
 
-const locales = { 'ko': ko };
+const locales = { 'en-US': enUS };
 
 const localizer = dateFnsLocalizer({
   format,
@@ -16,12 +16,12 @@ const localizer = dateFnsLocalizer({
 });
 
 const eventCategories = {
-  '아이디어톤': { color: '#FF6000', bgColor: '#FFF4ED' },
-  '프로젝트 미팅': { color: '#57068c', bgColor: '#F3E8FF' },
-  '스터디': { color: '#059669', bgColor: '#D1FAE5' },
+  'Ideathon': { color: '#FF6000', bgColor: '#FFF4ED' },
+  'Project Meeting': { color: '#57068c', bgColor: '#F3E8FF' },
+  'Study': { color: '#059669', bgColor: '#D1FAE5' },
   'GM': { color: '#DC2626', bgColor: '#FEE2E2' },
-  '회식': { color: '#2563EB', bgColor: '#DBEAFE' },
-  '세션': { color: '#9333EA', bgColor: '#F3E8FF' },
+  'Team Dinner': { color: '#2563EB', bgColor: '#DBEAFE' },
+  'Session': { color: '#9333EA', bgColor: '#F3E8FF' },
 };
 
 function EventsPage() {
@@ -29,37 +29,15 @@ function EventsPage() {
   const [loading, setLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [calHeight, setCalHeight] = useState(() => window.innerWidth < 768 ? 450 : 700);
+  const [currentView, setCurrentView] = useState('month');
 
   // Modal states
   const [showDetailModal, setShowDetailModal] = useState(false);
-  const [showFormModal, setShowFormModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
-
-  // Success popup
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-
-  // Form data
-  const [formData, setFormData] = useState({
-    event_title: '',
-    category: '아이디어톤',
-    start_date: '',
-    end_date: '',
-    location: '',
-    description: '',
-    is_public: true,
-  });
 
   useEffect(() => {
     fetchEvents(currentDate);
   }, [currentDate]);
-
-  useEffect(() => {
-    if (showSuccessPopup) {
-      const timer = setTimeout(() => setShowSuccessPopup(false), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [showSuccessPopup]);
 
   useEffect(() => {
     const handleResize = () => setCalHeight(window.innerWidth < 768 ? 450 : 700);
@@ -123,83 +101,6 @@ function EventsPage() {
     setCurrentDate(newDate);
   };
 
-  // Form handlers
-  const openAddForm = () => {
-    setFormData({
-      event_title: '',
-      category: '아이디어톤',
-      start_date: '',
-      end_date: '',
-      location: '',
-      description: '',
-      is_public: true,
-    });
-    setShowFormModal(true);
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const eventData = {
-      event_title: formData.event_title,
-      category: formData.category,
-      start_date: formData.start_date,
-      end_date: formData.end_date,
-      location: formData.location,
-      description: formData.description,
-      is_public: formData.is_public,
-    };
-
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/events`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(eventData),
-      });
-
-      if (!response.ok) throw new Error('Failed to create event');
-
-      setSuccessMessage('일정이 추가되었습니다!');
-      setShowSuccessPopup(true);
-      setShowFormModal(false);
-      fetchEvents(currentDate);
-    } catch (error) {
-      console.error('Error creating event:', error);
-      alert('일정 저장 중 오류가 발생했습니다.');
-    }
-  };
-
-  const handleDeleteEvent = async () => {
-    if (!selectedEvent) return;
-    if (!window.confirm('정말로 이 일정을 삭제하시겠습니까?')) return;
-
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/events/${selectedEvent.id}`,
-        { method: 'DELETE' }
-      );
-
-      if (!response.ok) throw new Error('Failed to delete event');
-
-      setSuccessMessage('일정이 삭제되었습니다!');
-      setShowSuccessPopup(true);
-      setShowDetailModal(false);
-      setSelectedEvent(null);
-      fetchEvents(currentDate);
-    } catch (error) {
-      console.error('Error deleting event:', error);
-      alert('일정 삭제 중 오류가 발생했습니다.');
-    }
-  };
-
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -208,17 +109,9 @@ function EventsPage() {
       {/* Page Header */}
       <div className="bg-gradient-to-r from-nyu-purple to-purple-800 text-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-[28px] md:text-4xl font-bold leading-tight md:leading-normal">Events</h1>
-              <p className="text-purple-200 mt-1 md:mt-2 text-[14px] md:text-lg">멋쟁이사자처럼 NYU 일정을 확인하세요</p>
-            </div>
-            <button
-              onClick={openAddForm}
-              className="px-4 md:px-6 py-2 md:py-3 bg-ll-orange hover:bg-orange-600 text-white rounded-lg transition-all duration-200 font-semibold shadow-button hover:shadow-hover hover:-translate-y-1 text-[14px] md:text-base"
-            >
-              + 일정 추가
-            </button>
+          <div>
+            <h1 className="text-[28px] md:text-4xl font-bold leading-tight md:leading-normal">Events</h1>
+            <p className="text-purple-200 mt-1 md:mt-2 text-[14px] md:text-lg">Check out LIKELION NYU's upcoming events</p>
           </div>
         </div>
       </div>
@@ -226,7 +119,7 @@ function EventsPage() {
       {/* Category Legend */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 md:mt-6">
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 md:p-4 shadow-custom">
-          <h3 className="font-semibold mb-2 md:mb-3 text-gray-700 text-[14px] md:text-base">카테고리</h3>
+          <h3 className="font-semibold mb-2 md:mb-3 text-gray-700 text-[14px] md:text-base">Categories</h3>
           <div className="flex flex-wrap gap-3 md:gap-4">
             {Object.entries(eventCategories).map(([category, style]) => (
               <div key={category} className="flex items-center gap-2">
@@ -243,7 +136,7 @@ function EventsPage() {
         <div className="bg-white rounded-lg shadow-card border border-gray-200 p-3 md:p-6">
           {loading ? (
             <div className="flex justify-center items-center h-96">
-              <div className="text-nyu-purple text-xl">로딩 중...</div>
+              <div className="text-nyu-purple text-xl">Loading...</div>
             </div>
           ) : (
             <Calendar
@@ -256,20 +149,22 @@ function EventsPage() {
               onSelectEvent={handleSelectEvent}
               onNavigate={handleNavigate}
               date={currentDate}
-              culture="ko"
+              view={currentView}
+              onView={(view) => setCurrentView(view)}
+              culture="en-US"
               messages={{
-                next: '다음',
-                previous: '이전',
-                today: '오늘',
-                month: '월',
-                week: '주',
-                day: '일',
-                agenda: '일정',
-                date: '날짜',
-                time: '시간',
-                event: '이벤트',
-                noEventsInRange: '해당 기간에 일정이 없습니다.',
-                showMore: (total) => `+${total} 더보기`,
+                next: 'Next',
+                previous: 'Back',
+                today: 'Today',
+                month: 'Month',
+                week: 'Week',
+                day: 'Day',
+                agenda: 'Agenda',
+                date: 'Date',
+                time: 'Time',
+                event: 'Event',
+                noEventsInRange: 'No events in this period.',
+                showMore: (total) => `+${total} more`,
               }}
             />
           )}
@@ -313,10 +208,10 @@ function EventsPage() {
                   </svg>
                   <div>
                     <p className="text-gray-700 font-medium text-[14px] md:text-base">
-                      {format(selectedEvent.start, 'yyyy년 M월 d일 (EEE) HH:mm', { locale: ko })}
+                      {format(selectedEvent.start, 'MMM d, yyyy (EEE) HH:mm', { locale: enUS })}
                     </p>
                     <p className="text-gray-500 text-sm">
-                      ~ {format(selectedEvent.end, 'yyyy년 M월 d일 (EEE) HH:mm', { locale: ko })}
+                      ~ {format(selectedEvent.end, 'MMM d, yyyy (EEE) HH:mm', { locale: enUS })}
                     </p>
                   </div>
                 </div>
@@ -343,160 +238,15 @@ function EventsPage() {
                 )}
               </div>
 
-              <div className="mt-6 pt-4 border-t flex gap-3">
-                <button
-                  onClick={handleDeleteEvent}
-                  className="px-4 md:px-6 py-2 md:py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-200 font-semibold text-[14px] md:text-base"
-                >
-                  삭제
-                </button>
+              <div className="mt-6 pt-4 border-t">
                 <button
                   onClick={() => { setShowDetailModal(false); setSelectedEvent(null); }}
-                  className="flex-1 py-2 md:py-3 bg-nyu-purple hover:bg-purple-800 text-white rounded-lg transition-colors duration-200 font-semibold text-[14px] md:text-base"
+                  className="w-full py-2 md:py-3 bg-nyu-purple hover:bg-purple-800 text-white rounded-lg transition-colors duration-200 font-semibold text-[14px] md:text-base"
                 >
-                  닫기
+                  Close
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Add Event Form Modal */}
-      {showFormModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-card max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-4 md:p-6 border-b border-gray-200">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight md:leading-normal">일정 추가</h2>
-                <button
-                  onClick={() => setShowFormModal(false)}
-                  className="text-gray-400 hover:text-gray-600 text-2xl"
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-
-            <form onSubmit={handleSubmit} className="p-4 md:p-6 space-y-4 md:space-y-5">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">제목 *</label>
-                <input
-                  type="text"
-                  name="event_title"
-                  value={formData.event_title}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nyu-purple focus:border-transparent"
-                  placeholder="일정 제목을 입력하세요"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">카테고리 *</label>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nyu-purple focus:border-transparent"
-                >
-                  {Object.keys(eventCategories).map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">시작 일시 *</label>
-                  <input
-                    type="datetime-local"
-                    name="start_date"
-                    value={formData.start_date}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nyu-purple focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">종료 일시 *</label>
-                  <input
-                    type="datetime-local"
-                    name="end_date"
-                    value={formData.end_date}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nyu-purple focus:border-transparent"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">장소</label>
-                <input
-                  type="text"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nyu-purple focus:border-transparent"
-                  placeholder="예: NYU 학생회관 3층 / Zoom 링크"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">설명 / 메모</label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  rows="4"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nyu-purple focus:border-transparent"
-                  placeholder="일정에 대한 상세 설명을 입력하세요"
-                />
-              </div>
-
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="is_public"
-                  checked={formData.is_public}
-                  onChange={handleInputChange}
-                  className="w-4 h-4 text-nyu-purple focus:ring-nyu-purple border-gray-300 rounded"
-                />
-                <label className="text-sm font-semibold text-gray-700">공개 일정</label>
-              </div>
-
-              <div className="flex gap-3 pt-4 border-t">
-                <button
-                  type="submit"
-                  className="flex-1 py-3 bg-nyu-purple hover:bg-purple-800 text-white rounded-lg transition-colors duration-200 font-semibold"
-                >
-                  일정 추가
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowFormModal(false)}
-                  className="px-4 md:px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-colors duration-200 font-semibold"
-                >
-                  취소
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Success Popup */}
-      {showSuccessPopup && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50">
-          <div className="flex items-center gap-3">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-            <span className="font-semibold">{successMessage}</span>
           </div>
         </div>
       )}

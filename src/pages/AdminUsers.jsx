@@ -85,6 +85,33 @@ export default function AdminUsers() {
   const inputClass =
     'bg-transparent border-b border-transparent hover:border-gray-600 focus:border-gray-400 outline-none text-gray-300 w-full min-w-[80px]';
 
+  const colorMap = {
+    green:  { bg: 'bg-green-900',  text: 'text-green-300'  },
+    red:    { bg: 'bg-red-900',    text: 'text-red-300'    },
+    blue:   { bg: 'bg-blue-900',   text: 'text-blue-300'   },
+    purple: { bg: 'bg-purple-900', text: 'text-purple-300' },
+    yellow: { bg: 'bg-yellow-900', text: 'text-yellow-300' },
+    gray:   { bg: 'bg-gray-700',   text: 'text-gray-300'   },
+  };
+
+  const BoolSelect = ({ id, field, value, isDeleted, trueLabel = 'Yes', falseLabel = 'No', trueColor = 'green', falseColor = 'red' }) => {
+    const c = value ? colorMap[trueColor] : colorMap[falseColor];
+    return (
+      <div className="relative inline-block">
+        <select
+          disabled={isDeleted}
+          value={String(value)}
+          onChange={(e) => handleEdit(id, field, e.target.value === 'true')}
+          className={`appearance-none rounded-full pl-[10px] pr-[28px] py-[3px] text-[13px] border-0 outline-none cursor-pointer disabled:cursor-not-allowed ${c.bg} ${c.text}`}
+        >
+          <option value="true">{trueLabel}</option>
+          <option value="false">{falseLabel}</option>
+        </select>
+        <span className="pointer-events-none absolute right-[8px] top-1/2 -translate-y-1/2 text-[12px]">▾</span>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
       <AdminNav />
@@ -118,17 +145,21 @@ export default function AdminUsers() {
           </p>
         ) : (
           <div className="bg-[#1a1a1a] rounded-lg overflow-x-auto border border-gray-800">
-            <table className="w-full text-gray-300 min-w-[900px]">
+            <table className="w-full text-gray-300 min-w-[1400px]">
               <thead className="bg-[#2a2a2a] text-white">
                 <tr>
                   <th className="px-4 py-3 text-left">ID</th>
                   <th className="px-4 py-3 text-left">Korean Name</th>
-                  <th className="px-4 py-3 text-left">English Name</th>
-                  <th className="px-4 py-3 text-left">Email</th>
-                  <th className="px-4 py-3 text-left">University</th>
+                  <th className="px-4 py-3 text-left min-w-[180px]">English Name</th>
+                  <th className="px-4 py-3 text-left min-w-[220px]">Email</th>
+                  <th className="px-4 py-3 text-left min-w-[180px]">University</th>
                   <th className="px-4 py-3 text-left">Team</th>
                   <th className="px-4 py-3 text-left">Grad Year</th>
-                  <th className="px-4 py-3 text-left">Status</th>
+                  <th className="px-4 py-3 text-left">Active</th>
+                  <th className="px-4 py-3 text-left">Admin</th>
+                  <th className="px-4 py-3 text-left">Undergrad</th>
+                  <th className="px-4 py-3 text-left">Mentor</th>
+                  <th className="px-4 py-3 text-left">Graduated</th>
                   <th className="px-4 py-3 text-left"></th>
                 </tr>
               </thead>
@@ -163,25 +194,25 @@ export default function AdminUsers() {
                           />
                         </td>
 
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-3 min-w-[180px]">
                           <input
                             disabled={isDeleted}
                             value={val('english_name')}
                             onChange={(e) => handleEdit(id, 'english_name', e.target.value)}
-                            className={inputClass}
+                            className={`${inputClass} min-w-[150px]`}
                           />
                         </td>
 
-                        <td className="px-4 py-3 text-gray-500">
+                        <td className="px-4 py-3 min-w-[220px] text-gray-500">
                           {m.school_email}
                         </td>
 
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-3 min-w-[180px]">
                           <input
                             disabled={isDeleted}
                             value={val('current_university')}
                             onChange={(e) => handleEdit(id, 'current_university', e.target.value)}
-                            className={inputClass}
+                            className={`${inputClass} min-w-[150px]`}
                           />
                         </td>
 
@@ -205,24 +236,23 @@ export default function AdminUsers() {
                         </td>
 
                         <td className="px-4 py-3">
-                          <div className="relative inline-block">
-                            <select
-                              disabled={isDeleted}
-                              value={val('is_active', m.is_active)}
-                              onChange={(e) => handleEdit(id, 'is_active', e.target.value === 'true')}
-                              className={`appearance-none rounded-full pl-[12px] pr-[32px] py-[4px] text-[14px] border-0 outline-none cursor-pointer disabled:cursor-not-allowed ${
-                                val('is_active', m.is_active)
-                                  ? 'bg-green-900 text-green-300'
-                                  : 'bg-red-900 text-red-300'
-                              }`}
-                            >
-                              <option value="true">Active</option>
-                              <option value="false">Inactive</option>
-                            </select>
-                            <span className="pointer-events-none absolute right-[10px] top-1/2 -translate-y-1/2 text-[14px]">
-                              ▾
-                            </span>
-                          </div>
+                          <BoolSelect id={id} field="is_active" value={val('is_active', m.is_active)} isDeleted={isDeleted} trueLabel="Active" falseLabel="Inactive" />
+                        </td>
+
+                        <td className="px-4 py-3">
+                          <BoolSelect id={id} field="is_admin" value={val('is_admin', m.is_admin)} isDeleted={isDeleted} trueLabel="Admin" falseLabel="User" falseColor="gray" />
+                        </td>
+
+                        <td className="px-4 py-3">
+                          <BoolSelect id={id} field="is_undergraduate" value={val('is_undergraduate', m.is_undergraduate)} isDeleted={isDeleted} trueLabel="Yes" falseLabel="No" trueColor="blue" falseColor="gray" />
+                        </td>
+
+                        <td className="px-4 py-3">
+                          <BoolSelect id={id} field="is_mentor" value={val('is_mentor', m.is_mentor)} isDeleted={isDeleted} trueLabel="Yes" falseLabel="No" trueColor="purple" falseColor="gray" />
+                        </td>
+
+                        <td className="px-4 py-3">
+                          <BoolSelect id={id} field="is_graduated" value={val('is_graduated', m.is_graduated)} isDeleted={isDeleted} trueLabel="Yes" falseLabel="No" trueColor="yellow" falseColor="gray" />
                         </td>
 
                         <td className="px-4 py-3">
@@ -242,7 +272,7 @@ export default function AdminUsers() {
                   })
                 ) : (
                   <tr>
-                    <td colSpan="9" className="px-4 py-6 text-center text-gray-500">
+                    <td colSpan="13" className="px-4 py-6 text-center text-gray-500">
                       No members found
                     </td>
                   </tr>
