@@ -6,6 +6,7 @@ export default function AdminAttendance() {
   const [loading, setLoading] = useState(false);
   const [filterMeeting, setFilterMeeting] = useState('');
   const [filterDate, setFilterDate] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
   const [changes, setChanges] = useState({});
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
@@ -83,9 +84,10 @@ export default function AdminAttendance() {
     return records.filter((r) => {
       if (filterMeeting && String(r.meeting_number) !== filterMeeting) return false;
       if (filterDate && r.date !== filterDate) return false;
+      if (filterStatus && r.status !== filterStatus) return false;
       return true;
     });
-  }, [records, filterMeeting, filterDate]);
+  }, [records, filterMeeting, filterDate, filterStatus]);
 
   const selectClass =
     'bg-[#2a2a2a] text-gray-300 border border-gray-700 rounded-full px-[16px] py-[8px] text-[14px] focus:outline-none focus:border-gray-500 cursor-pointer';
@@ -130,9 +132,20 @@ export default function AdminAttendance() {
             </datalist>
           </div>
 
-          {(filterMeeting || filterDate) && (
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className={selectClass}
+          >
+            <option value="">All Statuses</option>
+            <option value="Present">Present</option>
+            <option value="Late">Late</option>
+            <option value="Absent">Absent</option>
+          </select>
+
+          {(filterMeeting || filterDate || filterStatus) && (
             <button
-              onClick={() => { setFilterMeeting(''); setFilterDate(''); }}
+              onClick={() => { setFilterMeeting(''); setFilterDate(''); setFilterStatus(''); }}
               className="text-[14px] text-gray-400 hover:text-white underline px-[8px]"
             >
               Clear filters
