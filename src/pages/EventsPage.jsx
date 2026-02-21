@@ -3,8 +3,7 @@ import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay, startOfMonth, endOfMonth, addMonths, subMonths } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { useNavigate } from 'react-router-dom';
-import NYULogo from '../NYU_logo.png';
+import PublicNav from '../components/PublicNav';
 
 const locales = { 'ko': ko };
 
@@ -26,7 +25,6 @@ const eventCategories = {
 };
 
 function EventsPage() {
-  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -205,48 +203,7 @@ function EventsPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="flex items-center w-full px-4 lg:px-[32px] py-[16px] bg-white">
-        <div
-          onClick={() => navigate('/')}
-          className="flex items-center text-[20px] lg:text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap shrink-0"
-        >
-          LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
-          <img src={NYULogo} alt="NYU Logo" className="h-[20px] lg:h-[32px] ml-[8px]" />
-        </div>
-
-        <div className="hidden lg:flex items-center gap-[48px] bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto shadow-button">
-          <a href="/#about" className="text-[20px] hover:text-nyu-purple">
-            About Us
-          </a>
-          <button
-            onClick={() => navigate('/events')}
-            className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer"
-          >
-            Events
-          </button>
-          <button
-            onClick={() => navigate('/projects')}
-            className="text-[20px] hover:text-nyu-purple bg-transparent border-none cursor-pointer"
-          >
-            Projects
-          </button>
-        </div>
-
-        <button
-          onClick={() => navigate('/login')}
-          className="hidden lg:block px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 font-normal ml-[21px] shadow-button transition-all duration-200 hover:-translate-y-1 hover:shadow-hover"
-        >
-          Log In
-        </button>
-
-        {/* Mobile Log In button */}
-        <button
-          onClick={() => navigate('/login')}
-          className="lg:hidden ml-auto px-[14px] py-[7px] border border-black rounded-full text-[14px] hover:bg-gray-50 font-normal"
-        >
-          Log In
-        </button>
-      </nav>
+      <PublicNav />
 
       {/* Page Header */}
       <div className="bg-gradient-to-r from-nyu-purple to-purple-800 text-white shadow-lg">
