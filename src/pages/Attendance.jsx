@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
+import PublicNav from '../components/PublicNav';
 
 export default function AttendancePage() {
   const navigate = useNavigate();
@@ -15,9 +16,7 @@ export default function AttendancePage() {
   const [message, setMessage] = useState('');
   const [showPopup, setShowPopup] = useState(false); // 테스트용 - 나중에 false로 변경
 
-  const [showActivitiesMenu, setShowActivitiesMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const closeTimer = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,7 +36,8 @@ export default function AttendancePage() {
     }
   }, [showPopup]);
 
-  const handleAttendance = async () => {
+  const handleAttendance = async (e) => {
+    e?.preventDefault();
     setLoading(true);
     setMessage('');
 
@@ -94,102 +94,7 @@ export default function AttendancePage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="flex items-center w-full px-4 md:px-[32px] py-3 md:py-[16px] bg-white">
-        <div
-          onClick={() => navigate('/')}
-          className="flex text-xl md:text-[32px] font-bold cursor-pointer hover:opacity-80 transition-opacity"
-        >
-          LikeLion x <span className="text-nyu-purple ml-[8px]">NYU</span>
-        </div>
-
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-[48px] bg-white border border-black rounded-full px-[48px] py-[13px] font-normal ml-auto">
-          <a href="#about" className="text-[20px] hover:text-nyu-purple">
-            About Us
-          </a>
-          {/* Activities Dropdown Menu */}
-          <div
-            className="relative"
-            onMouseEnter={() => {
-              if (closeTimer.current) clearTimeout(closeTimer.current);
-              setShowActivitiesMenu(true);
-            }}
-            onMouseLeave={() => {
-              closeTimer.current = setTimeout(
-                () => setShowActivitiesMenu(false),
-                100,
-              );
-            }}
-          >
-            <span className="text-[20px] hover:text-nyu-purple cursor-pointer">
-              Activities
-            </span>
-            {showActivitiesMenu && (
-              <div
-                className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white border border-black rounded-lg shadow-lg py-2 min-w-[120px] z-50"
-                onMouseEnter={() => {
-                  if (closeTimer.current) clearTimeout(closeTimer.current);
-                }}
-                onMouseLeave={() => {
-                  closeTimer.current = setTimeout(
-                    () => setShowActivitiesMenu(false),
-                    400,
-                  );
-                }}
-              >
-                <button
-                  onClick={() => navigate('/events')}
-                  className="block w-full text-left px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors bg-transparent border-none cursor-pointer"
-                >
-                  Events
-                </button>
-                <a
-                  href="#projects"
-                  className="block px-4 py-2 text-[16px] hover:bg-gray-100 hover:text-nyu-purple transition-colors"
-                >
-                  Projects
-                </a>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <button
-          onClick={() => navigate('/login')}
-          className="hidden md:block px-[28px] py-[13px] border border-black rounded-full text-[20px] hover:bg-gray-50 text-[20px] font-normal ml-[21px]"
-        >
-          Log In
-        </button>
-
-        {/* Mobile Hamburger */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden ml-auto p-2"
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            {mobileMenuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
-        </button>
-      </nav>
+      <PublicNav />
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
@@ -241,7 +146,10 @@ export default function AttendancePage() {
             </h2>
 
             {/* Form */}
-            <div className="space-y-4 md:space-y-[16px]">
+            <form
+              onSubmit={handleAttendance}
+              className="space-y-4 md:space-y-[16px]"
+            >
               {/* Email */}
               <div>
                 <label className="block text-base md:text-[20px] font-bold mb-2 md:mb-[12px] md:leading-normal">
@@ -273,7 +181,7 @@ export default function AttendancePage() {
               {/* Login Button */}
               <div className="flex justify-center pt-6 md:pt-[30px] md:leading-normal">
                 <button
-                  onClick={handleAttendance}
+                  type="submit"
                   disabled={loading}
                   className="px-6 md:px-[24px] py-2 md:py-[8px] md:leading-normal border border-black rounded-full text-base md:text-[20px] font-normal hover:bg-gray-100 disabled:bg-gray-200 disabled:cursor-not-allowed transition-colors"
                 >
@@ -293,7 +201,7 @@ export default function AttendancePage() {
                   {message}
                 </div>
               )}
-            </div>
+            </form>
           </div>
         </div>
       </div>
