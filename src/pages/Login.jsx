@@ -35,7 +35,7 @@ export default function LoginPage() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData),
-        }
+        },
       );
 
       if (response.ok) {
@@ -64,13 +64,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Navigation */}
       <PublicNav />
 
       {/* Main Content */}
       <div className="px-4 md:px-[32px] py-[32px] md:py-[48px]">
-        <h1 className="text-[36px] md:text-[64px] font-bold mb-[32px] md:mb-[48px] leading-tight md:leading-normal">Log In</h1>
+        <h1 className="text-[36px] md:text-[64px] font-bold mb-[32px] md:mb-[48px] leading-tight md:leading-normal">
+          Log In
+        </h1>
 
         <div className="max-w-xl mx-auto">
           <div className="bg-white border border-black rounded-[30px] md:rounded-[50px] px-6 md:px-[72px] pt-[30px] pb-[43px]">
