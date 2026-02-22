@@ -90,7 +90,17 @@ export default function AdminAttendance() {
   }, [records, filterMeeting, filterDate, filterStatus]);
 
   const selectClass =
-    'bg-[#2a2a2a] text-gray-300 border border-gray-700 rounded-full px-[16px] py-[8px] text-[14px] focus:outline-none focus:border-gray-500 cursor-pointer';
+    'appearance-none bg-[#2a2a2a] text-gray-300 border border-gray-700 rounded-full pl-[16px] pr-[36px] py-[8px] text-[14px] focus:outline-none focus:border-gray-500 cursor-pointer';
+
+  const FilterArrow = () => (
+    <svg
+      className="pointer-events-none absolute right-[12px] top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+      fill="none" stroke="currentColor" strokeWidth="2.5"
+      viewBox="0 0 24 24"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+  );
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -103,18 +113,21 @@ export default function AdminAttendance() {
 
         {/* Filters + Save */}
         <div className="flex flex-wrap items-center gap-[12px] mb-[24px]">
-          <select
-            value={filterMeeting}
-            onChange={(e) => setFilterMeeting(e.target.value)}
-            className={selectClass}
-          >
-            <option value="">All Meetings</option>
-            {meetingNumbers.map((num) => (
-              <option key={num} value={String(num)}>
-                Meeting #{num}
-              </option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              value={filterMeeting}
+              onChange={(e) => setFilterMeeting(e.target.value)}
+              className={selectClass}
+            >
+              <option value="">All Meetings</option>
+              {meetingNumbers.map((num) => (
+                <option key={num} value={String(num)}>
+                  Meeting #{num}
+                </option>
+              ))}
+            </select>
+            <FilterArrow />
+          </div>
 
           <div className="relative">
             <input
@@ -132,16 +145,19 @@ export default function AdminAttendance() {
             </datalist>
           </div>
 
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className={selectClass}
-          >
-            <option value="">All Statuses</option>
-            <option value="Present">Present</option>
-            <option value="Late">Late</option>
-            <option value="Absent">Absent</option>
-          </select>
+          <div className="relative">
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className={selectClass}
+            >
+              <option value="">All Statuses</option>
+              <option value="Present">Present</option>
+              <option value="Late">Late</option>
+              <option value="Absent">Absent</option>
+            </select>
+            <FilterArrow />
+          </div>
 
           {(filterMeeting || filterDate || filterStatus) && (
             <button
@@ -221,9 +237,13 @@ export default function AdminAttendance() {
                                 <option value="Late">Late</option>
                                 <option value="Absent">Absent</option>
                               </select>
-                              <span className="pointer-events-none absolute right-[10px] top-1/2 -translate-y-1/2 text-[14px]">
-                                ▾
-                              </span>
+                              <svg
+                                className="pointer-events-none absolute right-[10px] top-1/2 -translate-y-1/2 w-3.5 h-3.5"
+                                fill="none" stroke="currentColor" strokeWidth="2.5"
+                                viewBox="0 0 24 24"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                              </svg>
                             </div>
                           </td>
                         </tr>
