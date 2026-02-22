@@ -88,7 +88,7 @@ export default function LikeLionNYU() {
 
   const prevCommunity = () => {
     setCurrentCommunity(
-      (prev) => (prev - 1 + communities.length) % communities.length
+      (prev) => (prev - 1 + communities.length) % communities.length,
     );
   };
 
@@ -108,7 +108,8 @@ export default function LikeLionNYU() {
       {/* Hero Section */}
       <section className="text-center py-[60px] md:py-[100px] px-[16px]">
         <h1 className="text-[30px] sm:text-[42px] md:text-[64px] lg:text-[96px] font-bold mb-[40px] md:mb-[60px] flex items-center justify-center leading-tight md:leading-normal whitespace-nowrap">
-          LikeLion <span className="mx-[6px] sm:mx-[10px] md:mx-[16px]">x</span> <span className="text-nyu-purple">NYU</span>
+          LikeLion <span className="mx-[6px] sm:mx-[10px] md:mx-[16px]">x</span>{' '}
+          <span className="text-nyu-purple">NYU</span>
           <img
             src={NYULogo}
             alt="NYU Logo"
@@ -138,7 +139,9 @@ export default function LikeLionNYU() {
 
       {/* Admin Section */}
       <section className="bg-nyu-purple py-[45px] px-4 md:px-[41px] text-white relative">
-        <h2 className="text-[28px] md:text-[36px] text-center mb-[30px] leading-normal md:leading-normal">Meet Our Admin</h2>
+        <h2 className="text-[28px] md:text-[36px] text-center mb-[30px] leading-normal md:leading-normal">
+          Meet Our Admin
+        </h2>
 
         <div className="max-w-6xl mx-auto relative">
           <button
@@ -173,35 +176,35 @@ export default function LikeLionNYU() {
                             : 'rotateY(0deg)',
                         }}
                       >
-                      {/* Front Side */}
-                      <div
-                        className="absolute w-full h-full bg-white rounded-[20px] p-[10px] md:p-[15px] text-center shadow-card flex flex-col"
-                        style={{ backfaceVisibility: 'hidden' }}
-                      >
-                        <div className="bg-gray-300 rounded-[16px] md:rounded-[20px] flex-1 min-h-0 mb-[6px] md:mb-[12px]"></div>
-                        <div className="text-black font-bold text-[12px] md:text-base leading-normal shrink-0 py-[2px]">
-                          {admin.name}
+                        {/* Front Side */}
+                        <div
+                          className="absolute w-full h-full bg-white rounded-[20px] p-[10px] md:p-[15px] text-center shadow-card flex flex-col"
+                          style={{ backfaceVisibility: 'hidden' }}
+                        >
+                          <div className="bg-gray-300 rounded-[16px] md:rounded-[20px] flex-1 min-h-0 mb-[6px] md:mb-[12px]"></div>
+                          <div className="text-black font-bold text-[12px] md:text-base leading-normal shrink-0 py-[2px]">
+                            {admin.name}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Back Side */}
-                      <div
-                        className="absolute w-full h-full bg-white rounded-[20px] p-[10px] md:p-[15px] text-center shadow-card flex flex-col justify-center items-center"
-                        style={{
-                          backfaceVisibility: 'hidden',
-                          transform: 'rotateY(180deg)',
-                        }}
-                      >
-                        <div className="text-black font-bold text-[14px] md:text-[20px] mb-[10px] md:mb-[16px] leading-normal md:leading-normal">
-                          {admin.name}
-                        </div>
-                        <div className="text-gray-700 text-[11px] md:text-[14px] leading-relaxed px-[6px] md:px-[12px]">
-                          {admin.description}
+                        {/* Back Side */}
+                        <div
+                          className="absolute w-full h-full bg-white rounded-[20px] p-[10px] md:p-[15px] text-center shadow-card flex flex-col justify-center items-center"
+                          style={{
+                            backfaceVisibility: 'hidden',
+                            transform: 'rotateY(180deg)',
+                          }}
+                        >
+                          <div className="text-black font-bold text-[14px] md:text-[20px] mb-[10px] md:mb-[16px] leading-normal md:leading-normal">
+                            {admin.name}
+                          </div>
+                          <div className="text-gray-700 text-[11px] md:text-[14px] leading-relaxed px-[6px] md:px-[12px]">
+                            {admin.description}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
                 );
               })}
           </div>
@@ -229,12 +232,10 @@ export default function LikeLionNYU() {
             ›
           </button>
         </div>
-
-
       </section>
 
       {/* Community Section */}
-      <section className="py-[60px] md:py-[140px] px-[16px] bg-gray-50">
+      <section className="py-[60px] md:py-[140px] px-[16px] bg-white">
         <div className="max-w-4xl mx-auto relative">
           <button
             onClick={prevCommunity}
@@ -301,8 +302,18 @@ export default function LikeLionNYU() {
           {/* Mobile community prev/next */}
           {communities.length > 1 && (
             <div className="flex justify-center gap-[24px] mt-[16px] md:hidden">
-              <button onClick={prevCommunity} className="text-[36px] hover:scale-110 transition-transform text-gray-600">‹</button>
-              <button onClick={nextCommunity} className="text-[36px] hover:scale-110 transition-transform text-gray-600">›</button>
+              <button
+                onClick={prevCommunity}
+                className="text-[36px] hover:scale-110 transition-transform text-gray-600"
+              >
+                ‹
+              </button>
+              <button
+                onClick={nextCommunity}
+                className="text-[36px] hover:scale-110 transition-transform text-gray-600"
+              >
+                ›
+              </button>
             </div>
           )}
         </div>
