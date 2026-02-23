@@ -145,7 +145,7 @@ export default function LikeLionNYU() {
               ? Array.from({ length: 4 }).map((_, i) => (
                   <div key={i}>
                     <div className="h-[20px] md:h-[30px] bg-white bg-opacity-20 rounded-full mb-[8px] md:mb-[12px] animate-pulse" />
-                    <div className="aspect-[3/4] bg-white bg-opacity-20 rounded-[20px] animate-pulse" />
+                    <div className="aspect-square md:aspect-[3/4] bg-white bg-opacity-20 rounded-[20px] animate-pulse" />
                   </div>
                 ))
               : admins
@@ -154,14 +154,14 @@ export default function LikeLionNYU() {
                     const globalIndex = currentAdmin + index;
                     return (
                       <div key={admin.id ?? globalIndex}>
-                        <div className="text-center text-[15px] md:text-[18px] lg:text-[22px] font-bold mb-[8px] md:mb-[12px] leading-tight">
+                        <div className="text-center text-[16px] md:text-[18px] lg:text-[22px] font-bold mb-[8px] md:mb-[12px] leading-tight">
                           {admin.position}
                         </div>
-                        {/* aspect-[4/5] on mobile, aspect-[3/4] on md+ */}
+                        {/* 2열(모바일): aspect-square, 4열(md+): aspect-[3/4] */}
                         <div
                           onMouseEnter={() => handleCardHover(globalIndex, true)}
                           onMouseLeave={() => handleCardHover(globalIndex, false)}
-                          className="relative cursor-pointer aspect-[4/5] md:aspect-[3/4]"
+                          className="relative cursor-pointer aspect-square md:aspect-[3/4]"
                           style={{ perspective: '1000px' }}
                         >
                           <div
