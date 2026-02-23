@@ -13,6 +13,8 @@ import AdminCalendarPage from './pages/AdminCalendarPage';
 import EventsPage from './pages/EventsPage';
 import AdminProjects from './pages/AdminProjects';
 import AdminAttendance from './pages/AdminAttendance';
+import AdminPhotos from './pages/AdminPhotos';
+import AdminLanding from './pages/AdminLanding';
 import AdminRoute from './components/AdminRoute';
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
         <Route path="/admin/calendar" element={<AdminRoute><AdminCalendarPage /></AdminRoute>} />
         <Route path="/admin/projects" element={<AdminRoute><AdminProjects /></AdminRoute>} />
         <Route path="/admin/attendance" element={<AdminRoute><AdminAttendance /></AdminRoute>} />
+        <Route path="/admin/photos" element={<AdminRoute><AdminPhotos /></AdminRoute>} />
+        <Route path="/admin/landing" element={<AdminRoute><AdminLanding /></AdminRoute>} />
       </Routes>
     </Router>
   );

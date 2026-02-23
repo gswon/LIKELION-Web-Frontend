@@ -1,65 +1,52 @@
-// admin 가져오는 api
-// project에 대한 모든걸 가져오는 api
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import NYULogo from '../NYU_logo.png';
 import PublicNav from '../components/PublicNav';
+
+const BASE = process.env.REACT_APP_API_URL;
 
 export default function LikeLionNYU() {
   const [currentAdmin, setCurrentAdmin] = useState(0);
   const [currentCommunity, setCurrentCommunity] = useState(0);
   const [flippedCards, setFlippedCards] = useState([]);
+  const [admins, setAdmins] = useState([]);
+  const [adminsLoading, setAdminsLoading] = useState(true);
+  const [memberPhotoMap, setMemberPhotoMap] = useState({}); // member_id -> photo_url
 
-  const admins = [
-    {
-      position: 'President',
-      name: 'Kristie Lee',
-      description:
-        'Leading LikeLion NYU with passion and dedication. Focused on building a strong tech community and fostering innovation among students.',
-    },
-    {
-      position: 'Vice-President',
-      name: 'Juno Lee',
-      description:
-        'Supporting the team with strategic planning and operations. Committed to creating meaningful learning experiences for all members.',
-    },
-    {
-      position: 'PM',
-      name: 'Gangwon Suh',
-      description:
-        'Managing projects and coordinating team efforts. Dedicated to delivering high-quality solutions and mentoring developers.',
-    },
-    {
-      position: 'Marketing',
-      name: 'HyeMin Kim',
-      description:
-        'Promoting LikeLion NYU and building our brand. Passionate about connecting with students and sharing our vision.',
-    },
-    {
-      position: 'Tech Lead',
-      name: 'Sarah Kim',
-      description:
-        'Guiding technical direction and architecture. Passionate about code quality and mentoring junior developers in best practices.',
-    },
-    {
-      position: 'Designer',
-      name: 'Mike Chen',
-      description:
-        'Creating beautiful and intuitive user experiences. Focused on bringing creative visions to life through thoughtful design.',
-    },
-    {
-      position: 'Developer',
-      name: 'Emily Park',
-      description:
-        'Building robust and scalable applications. Dedicated to writing clean code and implementing innovative solutions.',
-    },
-    {
-      position: 'Content Lead',
-      name: 'Alex Johnson',
-      description:
-        'Crafting engaging content and community stories. Committed to amplifying student voices and sharing impactful narratives.',
-    },
-  ];
+  useEffect(() => {
+    const fetchAdminCards = async () => {
+      try {
+        const res = await fetch(`${BASE}/api/admin-cards`);
+        if (!res.ok) return;
+        const data = await res.json();
+        setAdmins(data.cards ?? []);
+      } catch (err) {
+        console.error('Failed to load admin cards:', err);
+      } finally {
+        setAdminsLoading(false);
+      }
+    };
+
+    const fetchMemberPhotos = async () => {
+      try {
+        const res = await fetch(`${BASE}/api/retrieve-all-photos`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const map = {};
+        (data.photos || [])
+          .filter((p) => p.source === 'member' && p.member_id && p.photo_url)
+          .forEach((p) => {
+            // 멤버당 첫 번째 사진만 사용
+            if (!map[p.member_id]) map[p.member_id] = p.photo_url;
+          });
+        setMemberPhotoMap(map);
+      } catch (err) {
+        console.error('Failed to load member photos:', err);
+      }
+    };
+
+    fetchAdminCards();
+    fetchMemberPhotos();
+  }, []);
 
   const communities = [
     {
@@ -152,61 +139,76 @@ export default function LikeLionNYU() {
           </button>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-[16px] md:gap-[30px]">
-            {admins
-              .slice(currentAdmin, currentAdmin + 4)
-              .map((admin, index) => {
-                const globalIndex = currentAdmin + index;
-                return (
-                  <div key={globalIndex}>
-                    <div className="text-center text-[16px] md:text-[24px] font-bold mb-[10px] md:mb-[15px] leading-normal md:leading-normal">
-                      {admin.position}
-                    </div>
-                    <div
-                      onMouseEnter={() => handleCardHover(globalIndex, true)}
-                      onMouseLeave={() => handleCardHover(globalIndex, false)}
-                      className="relative cursor-pointer h-[240px] md:h-[400px]"
-                      style={{ perspective: '1000px' }}
-                    >
-                      <div
-                        className="relative w-full h-full transition-transform duration-1000"
-                        style={{
-                          transformStyle: 'preserve-3d',
-                          transform: flippedCards.includes(globalIndex)
-                            ? 'rotateY(180deg)'
-                            : 'rotateY(0deg)',
-                        }}
-                      >
-                        {/* Front Side */}
-                        <div
-                          className="absolute w-full h-full bg-white rounded-[20px] p-[10px] md:p-[15px] text-center shadow-card flex flex-col"
-                          style={{ backfaceVisibility: 'hidden' }}
-                        >
-                          <div className="bg-gray-300 rounded-[16px] md:rounded-[20px] flex-1 min-h-0 mb-[6px] md:mb-[12px]"></div>
-                          <div className="text-black font-bold text-[12px] md:text-base leading-normal shrink-0 py-[2px]">
-                            {admin.name}
-                          </div>
+            {adminsLoading
+              ? Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i}>
+                    <div className="h-[24px] md:h-[34px] bg-white bg-opacity-20 rounded-full mb-[10px] md:mb-[15px] animate-pulse" />
+                    <div className="h-[240px] md:h-[400px] bg-white bg-opacity-20 rounded-[20px] animate-pulse" />
+                  </div>
+                ))
+              : admins
+                  .slice(currentAdmin, currentAdmin + 4)
+                  .map((admin, index) => {
+                    const globalIndex = currentAdmin + index;
+                    return (
+                      <div key={admin.id ?? globalIndex}>
+                        <div className="text-center text-[16px] md:text-[24px] font-bold mb-[10px] md:mb-[15px] leading-normal md:leading-normal">
+                          {admin.position}
                         </div>
-
-                        {/* Back Side */}
                         <div
-                          className="absolute w-full h-full bg-white rounded-[20px] p-[10px] md:p-[15px] text-center shadow-card flex flex-col justify-center items-center"
-                          style={{
-                            backfaceVisibility: 'hidden',
-                            transform: 'rotateY(180deg)',
-                          }}
+                          onMouseEnter={() => handleCardHover(globalIndex, true)}
+                          onMouseLeave={() => handleCardHover(globalIndex, false)}
+                          className="relative cursor-pointer h-[240px] md:h-[400px]"
+                          style={{ perspective: '1000px' }}
                         >
-                          <div className="text-black font-bold text-[14px] md:text-[20px] mb-[10px] md:mb-[16px] leading-normal md:leading-normal">
-                            {admin.name}
-                          </div>
-                          <div className="text-gray-700 text-[11px] md:text-[14px] leading-relaxed px-[6px] md:px-[12px]">
-                            {admin.description}
+                          <div
+                            className="relative w-full h-full transition-transform duration-1000"
+                            style={{
+                              transformStyle: 'preserve-3d',
+                              transform: flippedCards.includes(globalIndex)
+                                ? 'rotateY(180deg)'
+                                : 'rotateY(0deg)',
+                            }}
+                          >
+                            {/* Front Side */}
+                            <div
+                              className="absolute w-full h-full bg-white rounded-[20px] p-[10px] md:p-[15px] text-center shadow-card flex flex-col"
+                              style={{ backfaceVisibility: 'hidden' }}
+                            >
+                              {admin.member_id && memberPhotoMap[admin.member_id] ? (
+                                <img
+                                  src={memberPhotoMap[admin.member_id]}
+                                  alt={admin.display_name}
+                                  className="rounded-[16px] md:rounded-[20px] flex-1 min-h-0 mb-[6px] md:mb-[12px] object-cover w-full"
+                                />
+                              ) : (
+                                <div className="bg-gray-300 rounded-[16px] md:rounded-[20px] flex-1 min-h-0 mb-[6px] md:mb-[12px]"></div>
+                              )}
+                              <div className="text-black font-bold text-[12px] md:text-base leading-normal shrink-0 py-[2px]">
+                                {admin.display_name}
+                              </div>
+                            </div>
+
+                            {/* Back Side */}
+                            <div
+                              className="absolute w-full h-full bg-white rounded-[20px] p-[10px] md:p-[15px] text-center shadow-card flex flex-col justify-center items-center"
+                              style={{
+                                backfaceVisibility: 'hidden',
+                                transform: 'rotateY(180deg)',
+                              }}
+                            >
+                              <div className="text-black font-bold text-[14px] md:text-[20px] mb-[10px] md:mb-[16px] leading-normal md:leading-normal">
+                                {admin.display_name}
+                              </div>
+                              <div className="text-gray-700 text-[11px] md:text-[14px] leading-relaxed px-[6px] md:px-[12px]">
+                                {admin.description}
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                );
-              })}
+                    );
+                  })}
           </div>
 
           {/* Mobile prev/next buttons */}

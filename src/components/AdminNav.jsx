@@ -11,7 +11,7 @@ export default function AdminNav() {
 
   const isActive = (path) => location.pathname === path;
   const isManagement = () =>
-    ['/admin/users', '/admin/calendar', '/admin/projects'].includes(location.pathname);
+    ['/admin/users', '/admin/calendar', '/admin/projects', '/admin/photos', '/admin/landing'].includes(location.pathname);
 
   const handleMouseEnter = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -103,6 +103,26 @@ export default function AdminNav() {
               >
                 Project Management
               </button>
+              <button
+                onClick={() => { navigate('/admin/photos'); setDropdownOpen(false); }}
+                className={`w-full text-left px-[20px] py-[14px] text-[16px] transition-colors border-t border-gray-800 ${
+                  isActive('/admin/photos')
+                    ? 'bg-[#2a2a2a] text-white'
+                    : 'text-gray-300 hover:bg-[#2a2a2a] hover:text-white'
+                }`}
+              >
+                Photo Management
+              </button>
+              <button
+                onClick={() => { navigate('/admin/landing'); setDropdownOpen(false); }}
+                className={`w-full text-left px-[20px] py-[14px] text-[16px] transition-colors border-t border-gray-800 ${
+                  isActive('/admin/landing')
+                    ? 'bg-[#2a2a2a] text-white'
+                    : 'text-gray-300 hover:bg-[#2a2a2a] hover:text-white'
+                }`}
+              >
+                Landing Page
+              </button>
             </div>
           )}
         </div>
@@ -166,6 +186,22 @@ export default function AdminNav() {
             }`}
           >
             Project Management
+          </button>
+          <button
+            onClick={() => { navigate('/admin/photos'); setMobileOpen(false); }}
+            className={`text-left px-[16px] py-[12px] rounded-[10px] text-[16px] ${
+              isActive('/admin/photos') ? 'bg-[#2a2a2a] text-white' : 'text-gray-300 hover:bg-[#2a2a2a]'
+            }`}
+          >
+            Photo Management
+          </button>
+          <button
+            onClick={() => { navigate('/admin/landing'); setMobileOpen(false); }}
+            className={`text-left px-[16px] py-[12px] rounded-[10px] text-[16px] ${
+              isActive('/admin/landing') ? 'bg-[#2a2a2a] text-white' : 'text-gray-300 hover:bg-[#2a2a2a]'
+            }`}
+          >
+            Landing Page
           </button>
           <button
             onClick={() => { navigate('/'); setMobileOpen(false); }}
