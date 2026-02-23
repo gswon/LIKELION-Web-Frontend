@@ -125,25 +125,27 @@ export default function LikeLionNYU() {
       </section>
 
       {/* Admin Section */}
-      <section className="bg-nyu-purple py-[45px] px-4 md:px-[41px] text-white relative">
-        <h2 className="text-[28px] md:text-[36px] text-center mb-[30px] leading-normal md:leading-normal">
+      <section className="bg-nyu-purple py-[45px] px-4 md:px-[41px] text-white">
+        <h2 className="text-[28px] md:text-[36px] text-center mb-[30px] leading-normal">
           Meet Our Admin
         </h2>
 
-        <div className="max-w-6xl mx-auto relative">
+        <div className="max-w-6xl mx-auto flex items-center gap-2 md:gap-4">
+          {/* Prev arrow — always inline, never clipped */}
           <button
             onClick={prevAdmin}
-            className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 text-[36px] hover:scale-110 transition-transform"
+            className="shrink-0 text-[28px] md:text-[40px] leading-none hover:scale-110 transition-transform"
           >
             ‹
           </button>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-[16px] md:gap-[30px]">
+          {/* Card grid — flex-1 so it fills space between arrows */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5 lg:gap-[30px] flex-1 min-w-0">
             {adminsLoading
               ? Array.from({ length: 4 }).map((_, i) => (
                   <div key={i}>
-                    <div className="h-[24px] md:h-[34px] bg-white bg-opacity-20 rounded-full mb-[10px] md:mb-[15px] animate-pulse" />
-                    <div className="h-[240px] md:h-[400px] bg-white bg-opacity-20 rounded-[20px] animate-pulse" />
+                    <div className="h-[20px] md:h-[30px] bg-white bg-opacity-20 rounded-full mb-[8px] md:mb-[12px] animate-pulse" />
+                    <div className="aspect-[3/4] bg-white bg-opacity-20 rounded-[20px] animate-pulse" />
                   </div>
                 ))
               : admins
@@ -152,17 +154,18 @@ export default function LikeLionNYU() {
                     const globalIndex = currentAdmin + index;
                     return (
                       <div key={admin.id ?? globalIndex}>
-                        <div className="text-center text-[16px] md:text-[24px] font-bold mb-[10px] md:mb-[15px] leading-normal md:leading-normal">
+                        <div className="text-center text-[13px] md:text-[18px] lg:text-[22px] font-bold mb-[8px] md:mb-[12px] leading-tight">
                           {admin.position}
                         </div>
+                        {/* aspect-[3/4] gives consistent portrait ratio at every width */}
                         <div
                           onMouseEnter={() => handleCardHover(globalIndex, true)}
                           onMouseLeave={() => handleCardHover(globalIndex, false)}
-                          className="relative cursor-pointer h-[240px] md:h-[400px]"
+                          className="relative cursor-pointer aspect-[3/4]"
                           style={{ perspective: '1000px' }}
                         >
                           <div
-                            className="relative w-full h-full transition-transform duration-1000"
+                            className="absolute inset-0 transition-transform duration-1000"
                             style={{
                               transformStyle: 'preserve-3d',
                               transform: flippedCards.includes(globalIndex)
@@ -172,35 +175,35 @@ export default function LikeLionNYU() {
                           >
                             {/* Front Side */}
                             <div
-                              className="absolute w-full h-full bg-white rounded-[20px] p-[10px] md:p-[15px] text-center shadow-card flex flex-col"
+                              className="absolute w-full h-full bg-white rounded-[16px] md:rounded-[20px] p-[8px] md:p-[12px] text-center shadow-card flex flex-col"
                               style={{ backfaceVisibility: 'hidden' }}
                             >
                               {admin.member_id && memberPhotoMap[admin.member_id] ? (
                                 <img
                                   src={memberPhotoMap[admin.member_id]}
                                   alt={admin.display_name}
-                                  className="rounded-[16px] md:rounded-[20px] flex-1 min-h-0 mb-[6px] md:mb-[12px] object-cover w-full"
+                                  className="rounded-[12px] md:rounded-[16px] flex-1 min-h-0 mb-[6px] md:mb-[10px] object-cover w-full"
                                 />
                               ) : (
-                                <div className="bg-gray-300 rounded-[16px] md:rounded-[20px] flex-1 min-h-0 mb-[6px] md:mb-[12px]"></div>
+                                <div className="bg-gray-300 rounded-[12px] md:rounded-[16px] flex-1 min-h-0 mb-[6px] md:mb-[10px]" />
                               )}
-                              <div className="text-black font-bold text-[12px] md:text-base leading-normal shrink-0 py-[2px]">
+                              <div className="text-black font-bold text-[11px] md:text-[14px] leading-tight shrink-0">
                                 {admin.display_name}
                               </div>
                             </div>
 
                             {/* Back Side */}
                             <div
-                              className="absolute w-full h-full bg-white rounded-[20px] p-[10px] md:p-[15px] text-center shadow-card flex flex-col justify-center items-center"
+                              className="absolute w-full h-full bg-white rounded-[16px] md:rounded-[20px] p-[10px] md:p-[15px] text-center shadow-card flex flex-col justify-center items-center"
                               style={{
                                 backfaceVisibility: 'hidden',
                                 transform: 'rotateY(180deg)',
                               }}
                             >
-                              <div className="text-black font-bold text-[14px] md:text-[20px] mb-[10px] md:mb-[16px] leading-normal md:leading-normal">
+                              <div className="text-black font-bold text-[12px] md:text-[18px] mb-[8px] md:mb-[14px] leading-tight">
                                 {admin.display_name}
                               </div>
-                              <div className="text-gray-700 text-[11px] md:text-[14px] leading-relaxed px-[6px] md:px-[12px]">
+                              <div className="text-gray-700 text-[10px] md:text-[13px] leading-relaxed px-[4px] md:px-[10px]">
                                 {admin.description}
                               </div>
                             </div>
@@ -211,25 +214,10 @@ export default function LikeLionNYU() {
                   })}
           </div>
 
-          {/* Mobile prev/next buttons */}
-          <div className="flex justify-center gap-[24px] mt-[20px] md:hidden">
-            <button
-              onClick={prevAdmin}
-              className="text-[36px] hover:scale-110 transition-transform"
-            >
-              ‹
-            </button>
-            <button
-              onClick={nextAdmin}
-              className="text-[36px] hover:scale-110 transition-transform"
-            >
-              ›
-            </button>
-          </div>
-
+          {/* Next arrow — always inline, never clipped */}
           <button
             onClick={nextAdmin}
-            className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 text-[36px] hover:scale-110 transition-transform"
+            className="shrink-0 text-[28px] md:text-[40px] leading-none hover:scale-110 transition-transform"
           >
             ›
           </button>
