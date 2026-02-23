@@ -140,7 +140,7 @@ export default function LikeLionNYU() {
           </button>
 
           {/* Card grid — flex-1 so it fills space between arrows */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5 lg:gap-[30px] flex-1 min-w-0">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 lg:gap-[30px] flex-1 min-w-0">
             {adminsLoading
               ? Array.from({ length: 4 }).map((_, i) => (
                   <div key={i}>
