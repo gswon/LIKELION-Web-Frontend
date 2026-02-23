@@ -181,12 +181,12 @@ export default function LikeLionNYU() {
                                 <img
                                   src={memberPhotoMap[admin.member_id]}
                                   alt={admin.display_name}
-                                  className="rounded-[12px] md:rounded-[16px] flex-[7] md:flex-1 min-h-0 mb-[6px] md:mb-[10px] object-cover w-full"
+                                  className="rounded-[12px] md:rounded-[16px] flex-1 min-h-0 mb-[6px] md:mb-[10px] object-cover w-full"
                                 />
                               ) : (
-                                <div className="bg-gray-300 rounded-[12px] md:rounded-[16px] flex-[7] md:flex-1 min-h-0 mb-[6px] md:mb-[10px]" />
+                                <div className="bg-gray-300 rounded-[12px] md:rounded-[16px] flex-1 min-h-0 mb-[6px] md:mb-[10px]" />
                               )}
-                              <div className="text-black font-bold text-[13px] md:text-[14px] leading-tight flex-[3] md:flex-none flex items-center justify-center">
+                              <div className="text-black font-bold text-[13px] md:text-[14px] leading-tight shrink-0">
                                 {admin.display_name}
                               </div>
                             </div>
