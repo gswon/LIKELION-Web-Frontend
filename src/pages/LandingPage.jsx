@@ -154,14 +154,14 @@ export default function LikeLionNYU() {
                     const globalIndex = currentAdmin + index;
                     return (
                       <div key={admin.id ?? globalIndex}>
-                        <div className="text-center text-[13px] md:text-[18px] lg:text-[22px] font-bold mb-[8px] md:mb-[12px] leading-tight">
+                        <div className="text-center text-[15px] md:text-[18px] lg:text-[22px] font-bold mb-[8px] md:mb-[12px] leading-tight">
                           {admin.position}
                         </div>
-                        {/* aspect-[3/4] gives consistent portrait ratio at every width */}
+                        {/* aspect-[4/5] on mobile, aspect-[3/4] on md+ */}
                         <div
                           onMouseEnter={() => handleCardHover(globalIndex, true)}
                           onMouseLeave={() => handleCardHover(globalIndex, false)}
-                          className="relative cursor-pointer aspect-[3/4]"
+                          className="relative cursor-pointer aspect-[4/5] md:aspect-[3/4]"
                           style={{ perspective: '1000px' }}
                         >
                           <div
@@ -187,7 +187,7 @@ export default function LikeLionNYU() {
                               ) : (
                                 <div className="bg-gray-300 rounded-[12px] md:rounded-[16px] flex-1 min-h-0 mb-[6px] md:mb-[10px]" />
                               )}
-                              <div className="text-black font-bold text-[11px] md:text-[14px] leading-tight shrink-0">
+                              <div className="text-black font-bold text-[13px] md:text-[14px] leading-tight shrink-0">
                                 {admin.display_name}
                               </div>
                             </div>
@@ -200,10 +200,10 @@ export default function LikeLionNYU() {
                                 transform: 'rotateY(180deg)',
                               }}
                             >
-                              <div className="text-black font-bold text-[12px] md:text-[18px] mb-[8px] md:mb-[14px] leading-tight">
+                              <div className="text-black font-bold text-[14px] md:text-[18px] mb-[8px] md:mb-[14px] leading-tight">
                                 {admin.display_name}
                               </div>
-                              <div className="text-gray-700 text-[10px] md:text-[13px] leading-relaxed px-[4px] md:px-[10px]">
+                              <div className="text-gray-700 text-[11px] md:text-[13px] leading-relaxed px-[4px] md:px-[10px]">
                                 {admin.description}
                               </div>
                             </div>
