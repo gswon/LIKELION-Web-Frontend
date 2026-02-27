@@ -8,7 +8,7 @@ const EMPTY_FORM = {
   display_name: '',
   description: '',
   member_id: '',
-  display_order: 0,
+  order_num: 0,
 };
 
 export default function AdminLanding() {
@@ -40,44 +40,13 @@ export default function AdminLanding() {
       const res = await fetch(`${BASE}/api/admin-cards`);
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       const data = await res.json();
-      setCards(data.cards ?? []);
+      const sorted = (data.cards ?? []).sort((a, b) => a.order_num - b.order_num);
+      setCards(sorted);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
-
-  /* ── Fetch then normalize display_order to 1, 2, 3, ... with no gaps ── */
-  const fetchAndNormalize = async () => {
-    const res = await fetch(`${BASE}/api/admin-cards`);
-    if (!res.ok) throw new Error(`Server error: ${res.status}`);
-    const data = await res.json();
-    const sorted = (data.cards ?? []).sort((a, b) => a.display_order - b.display_order);
-
-    // Reassign 1, 2, 3... — moves are always downward so ascending order is safe
-    for (let i = 0; i < sorted.length; i++) {
-      const card = sorted[i];
-      const expected = i + 1;
-      if (card.display_order !== expected) {
-        await fetch(`${BASE}/api/adminpage/admin-cards/${card.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            position: card.position,
-            display_name: card.display_name,
-            description: card.description ?? null,
-            member_id: card.member_id ?? null,
-            display_order: expected,
-          }),
-        });
-      }
-    }
-
-    const res2 = await fetch(`${BASE}/api/admin-cards`);
-    if (!res2.ok) throw new Error(`Server error: ${res2.status}`);
-    const data2 = await res2.json();
-    setCards(data2.cards ?? []);
   };
 
   /* ── Fetch members for select ── */
@@ -99,13 +68,13 @@ export default function AdminLanding() {
 
   /* ── Edit ── */
   const handleEdit = (card) => {
-    setEditingId(card.id);
+    setEditingId(card.card_id);
     setEditForm({
       position: card.position ?? '',
       display_name: card.display_name ?? '',
       description: card.description ?? '',
       member_id: card.member_id ?? '',
-      display_order: card.display_order ?? 0,
+      order_num: card.order_num ?? 0,
     });
   };
 
@@ -114,8 +83,8 @@ export default function AdminLanding() {
 
   const handleCancelEdit = () => setEditingId(null);
 
-  /* ── Save → PUT /api/adminpage/admin-cards/:id ── */
-  const handleSave = async (id) => {
+  /* ── Save → PUT /api/adminpage/admin-cards/:card_id ── */
+  const handleSave = async (cardId) => {
     if (!editForm.position.trim() || !editForm.display_name.trim()) {
       showToast('Position and Display Name are required.', 'error');
       return;
@@ -127,68 +96,13 @@ export default function AdminLanding() {
         display_name: editForm.display_name.trim(),
         description: editForm.description.trim() || null,
         member_id: editForm.member_id ? Number(editForm.member_id) : null,
-        display_order: Number(editForm.display_order),
+        order_num: Number(editForm.order_num),
       };
 
-      // Step 1: Park this card at a safe temp slot so it doesn't block any shifts
-      let res = await fetch(`${BASE}/api/adminpage/admin-cards/${id}`, {
+      const res = await fetch(`${BASE}/api/adminpage/admin-cards/${cardId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...body, display_order: 9999 }),
-      });
-      if (!res.ok) throw new Error(`Server error: ${res.status}`);
-
-      // Step 2: Fetch FRESH state of all OTHER cards from DB (never rely on stale React state)
-      const freshRes = await fetch(`${BASE}/api/admin-cards`);
-      if (!freshRes.ok) throw new Error(`Server error: ${freshRes.status}`);
-      const { cards: freshCards } = await freshRes.json();
-      const others = (freshCards ?? [])
-        .filter((c) => c.id !== id)
-        .sort((a, b) => a.display_order - b.display_order);
-
-      // Step 3: Compact others to 1…(n-1) to eliminate any gaps
-      //         Ascending processing is safe: every move is downward or a no-op
-      for (let i = 0; i < others.length; i++) {
-        const card = others[i];
-        const compact = i + 1;
-        if (card.display_order !== compact) {
-          await fetch(`${BASE}/api/adminpage/admin-cards/${card.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              position: card.position,
-              display_name: card.display_name,
-              description: card.description ?? null,
-              member_id: card.member_id ?? null,
-              display_order: compact,
-            }),
-          });
-        }
-      }
-
-      // Step 4: Open a slot at the target position by shifting others[target-1 … n-2] up by 1
-      //         Process highest-first to avoid transient unique-constraint conflicts
-      const insertAt = Math.max(1, Math.min(body.display_order, others.length + 1));
-      for (let i = others.length - 1; i >= insertAt - 1; i--) {
-        const card = others[i];
-        await fetch(`${BASE}/api/adminpage/admin-cards/${card.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            position: card.position,
-            display_name: card.display_name,
-            description: card.description ?? null,
-            member_id: card.member_id ?? null,
-            display_order: i + 2, // compact position was i+1; shift to i+2
-          }),
-        });
-      }
-
-      // Step 5: Place the card at the target slot (now guaranteed empty)
-      res = await fetch(`${BASE}/api/adminpage/admin-cards/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...body, display_order: insertAt }),
+        body: JSON.stringify(body),
       });
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
 
@@ -198,8 +112,7 @@ export default function AdminLanding() {
       showToast(`Failed to save: ${err.message}`, 'error');
     } finally {
       setSaving(false);
-      // Always sync React state with actual DB (catches partial failures too)
-      fetchAndNormalize().catch(() => { });
+      fetchCards();
     }
   };
 
@@ -219,56 +132,13 @@ export default function AdminLanding() {
         display_name: createForm.display_name.trim(),
         description: createForm.description.trim() || null,
         member_id: createForm.member_id ? Number(createForm.member_id) : null,
-        display_order: Number(createForm.display_order),
+        order_num: createForm.order_num ? Number(createForm.order_num) : undefined,
       };
 
-      // Step 1: Fetch FRESH state from DB (never rely on stale React state)
-      const freshRes = await fetch(`${BASE}/api/admin-cards`);
-      if (!freshRes.ok) throw new Error(`Server error: ${freshRes.status}`);
-      const { cards: freshCards } = await freshRes.json();
-      const existing = (freshCards ?? []).sort((a, b) => a.display_order - b.display_order);
-
-      // Step 2: Compact existing cards to 1…n (eliminate any gaps)
-      for (let i = 0; i < existing.length; i++) {
-        const card = existing[i];
-        const compact = i + 1;
-        if (card.display_order !== compact) {
-          await fetch(`${BASE}/api/adminpage/admin-cards/${card.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              position: card.position,
-              display_name: card.display_name,
-              description: card.description ?? null,
-              member_id: card.member_id ?? null,
-              display_order: compact,
-            }),
-          });
-        }
-      }
-
-      // Step 3: Open a slot at the target position (highest-first to avoid conflicts)
-      const insertAt = Math.max(1, Math.min(body.display_order, existing.length + 1));
-      for (let i = existing.length - 1; i >= insertAt - 1; i--) {
-        const card = existing[i];
-        await fetch(`${BASE}/api/adminpage/admin-cards/${card.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            position: card.position,
-            display_name: card.display_name,
-            description: card.description ?? null,
-            member_id: card.member_id ?? null,
-            display_order: i + 2,
-          }),
-        });
-      }
-
-      // Step 4: Insert new card at the now-empty target slot
       const res = await fetch(`${BASE}/api/adminpage/admin-cards`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...body, display_order: insertAt }),
+        body: JSON.stringify(body),
       });
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       const data = await res.json();
@@ -279,18 +149,18 @@ export default function AdminLanding() {
       showToast(`Failed to create: ${err.message}`, 'error');
     } finally {
       setCreatingSaving(false);
-      fetchAndNormalize().catch(() => { });
+      fetchCards();
     }
   };
 
-  /* ── Delete → DELETE /api/adminpage/admin-cards/:id ── */
+  /* ── Delete → DELETE /api/adminpage/admin-cards/:card_id ── */
   const handleDelete = async (card) => {
     if (!window.confirm(`Delete "${card.display_name}"? This cannot be undone.`)) return;
     try {
-      const res = await fetch(`${BASE}/api/adminpage/admin-cards/${card.id}`, { method: 'DELETE' });
+      const res = await fetch(`${BASE}/api/adminpage/admin-cards/${card.card_id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       showToast(`"${card.display_name}" deleted.`);
-      await fetchAndNormalize();
+      fetchCards();
     } catch (err) {
       showToast(`Failed to delete: ${err.message}`, 'error');
     }
@@ -361,15 +231,15 @@ export default function AdminLanding() {
         </div>
       </label>
 
-      {/* Display Order */}
+      {/* Order Number */}
       <label className="flex flex-col gap-1 text-gray-400 text-[13px]">
         Display Order *
         <input
           type="number"
           min={0}
           className="bg-[#0a0a0a] border border-gray-600 rounded-[8px] px-3 py-2 text-white text-[15px] focus:outline-none focus:border-nyu-purple w-32"
-          value={formValues.display_order}
-          onChange={(e) => onChange('display_order', e.target.value)}
+          value={formValues.order_num}
+          onChange={(e) => onChange('order_num', e.target.value)}
         />
       </label>
 
@@ -385,24 +255,24 @@ export default function AdminLanding() {
 
   /* ── Card ── */
   const renderCard = (card) => {
-    const isEditing = editingId === card.id;
+    const isEditing = editingId === card.card_id;
     const memberName = allMembers.find((m) => m.member_id === card.member_id)?.english_name;
 
     return (
       <div
-        key={card.id}
+        key={card.card_id}
         className="bg-[#1a1a1a] border border-gray-700 rounded-[20px] overflow-hidden flex flex-col"
       >
         <div className="p-4 md:p-8 flex flex-col gap-4 flex-1">
           {isEditing ? (
             <>
               <p className="text-nyu-purple text-[13px] font-semibold uppercase tracking-wider">
-                Editing Card #{card.id}
+                Editing Card #{card.card_id}
               </p>
               {renderForm(
                 editForm,
                 handleFormChange,
-                () => handleSave(card.id),
+                () => handleSave(card.card_id),
                 saving ? 'Saving...' : 'Save',
               )}
               <button
@@ -417,7 +287,7 @@ export default function AdminLanding() {
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-nyu-bright-purple text-[11px] font-semibold uppercase tracking-widest mb-1">
-                    Order #{card.display_order}
+                    Order #{card.order_num}
                   </p>
                   <h3 className="text-[20px] md:text-[26px] font-bold text-white leading-snug">
                     {card.display_name}
@@ -472,8 +342,8 @@ export default function AdminLanding() {
             onClick={() => {
               setCreating((v) => {
                 if (!v) {
-                  const nextOrder = cards.length > 0 ? Math.max(...cards.map((c) => c.display_order)) + 1 : 1;
-                  setCreateForm({ ...EMPTY_FORM, display_order: nextOrder });
+                  const nextOrder = cards.length > 0 ? Math.max(...cards.map((c) => c.order_num)) + 1 : 1;
+                  setCreateForm({ ...EMPTY_FORM, order_num: nextOrder });
                 } else {
                   setCreateForm(EMPTY_FORM);
                 }
