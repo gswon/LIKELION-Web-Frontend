@@ -1,84 +1,206 @@
-# Getting Started with Create React App
+# LIKELION x NYU — Web Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Frontend repository for the NYU LikeLion community management platform.
+Features event management, project showcase, QR-based attendance check-in, and an admin dashboard.
 
-## Setting Up .env
+---
 
-Before running the project, create your .env file.
+## Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| Framework | React 19 |
+| Routing | React Router DOM v7 |
+| Styling | Tailwind CSS 3 |
+| Calendar | react-big-calendar |
+| Date | date-fns |
+| QR Code | qrcode |
+| Build | Create React App (react-scripts) |
+| Font | Zen Kaku Gothic Antique (Google Fonts) |
+
+---
+
+## Project Structure
 
 ```
+src/
+├── components/
+│   ├── AdminNav.jsx          # Admin panel navigation with dropdown
+│   ├── AdminRoute.jsx        # Protected route wrapper for admin pages
+│   └── PublicNav.jsx         # Public navigation bar
+│
+├── pages/
+│   ├── [Public]
+│   │   ├── LandingPage.jsx   # Main landing page
+│   │   ├── Login.jsx         # Login
+│   │   ├── Signup.jsx        # Sign up with validation
+│   │   ├── Attendance.jsx    # QR attendance check-in
+│   │   ├── ProjectsPage.jsx  # Project showcase
+│   │   └── EventsPage.jsx    # Event calendar
+│   │
+│   └── [Admin] (login + admin role required)
+│       ├── AdminPage.jsx         # Admin dashboard home
+│       ├── AdminQR.jsx           # Meeting QR code generator
+│       ├── AdminUsers.jsx        # User management
+│       ├── AdminCalendarPage.jsx # Event CRUD
+│       ├── AdminProjects.jsx     # Project management
+│       ├── AdminPhotos.jsx       # Photo upload & management
+│       ├── AdminAttendance.jsx   # Attendance session tracking
+│       └── AdminLanding.jsx      # Landing page content management
+│
+├── App.js         # Route configuration
+├── ScrollToTop.js # Scroll to top on route change
+├── index.js
+└── index.css
+```
+
+---
+
+## Pages & Routes
+
+### Public
+
+| Route | Description |
+|-------|-------------|
+| `/` | Landing page — admin card carousel, project showcase, footer |
+| `/login` | Email & password login |
+| `/signup` | User registration with validation |
+| `/attendance?meeting_number={n}` | QR code attendance check-in |
+| `/projects` | Full project list |
+| `/events` | Event calendar (month / week / day / agenda views) |
+
+### Admin (Protected)
+
+| Route | Description |
+|-------|-------------|
+| `/admin` | Admin dashboard home |
+| `/admin/qr` | Generate meeting QR codes |
+| `/admin/users` | View & edit member accounts |
+| `/admin/calendar` | Create / edit / delete events |
+| `/admin/projects` | Manage projects |
+| `/admin/photos` | Upload photos & link to members |
+| `/admin/attendance` | Monitor attendance sessions |
+| `/admin/landing` | Manage landing page admin cards |
+
+---
+
+## Key Features
+
+### Landing Page
+- LikeLion x NYU branded hero section
+- Admin profile **flip cards** with hover animation (reveals description)
+- Carousel navigation with arrow controls
+- Community photo gallery & Instagram link
+
+### Sign Up Validation
+- Korean name: Korean characters only, max 10 chars
+- English name: auto-capitalization, max 50 chars
+- School email: `.edu` domain required
+- Password: no spaces allowed
+- Graduation year: 1950–2050
+- University: NYU / SVA / Parsons / custom input
+- Team: Study / Project / Other
+
+### Event Calendar
+Events are color-coded by category:
+
+| Category | Color |
+|----------|-------|
+| Ideathon | Orange `#FF6000` |
+| Project Meeting | Purple `#57068c` |
+| Study | Green `#059669` |
+| GM | Red `#DC2626` |
+| Team Dinner | Blue `#2563EB` |
+| Session | Purple `#9333EA` |
+
+### Attendance System
+1. Admin generates a QR code for a meeting at `/admin/qr`
+2. Member scans QR → lands on `/attendance?meeting_number={n}`
+3. Attendance is recorded automatically and a success popup is shown
+
+### Project Showcase
+- Project name, status (Planning / In Progress / Completed), team name
+- Tech stack tags, team members, GitHub link, thumbnail image
+
+---
+
+## Design System
+
+**Brand Colors**
+- NYU Purple: `#57068c`
+- LikeLion Orange: `#FF6000`
+
+**Admin Dark Theme**
+- Background: `#0a0a0a` / `#1a1a1a` / `#2a2a2a`
+
+**Custom Animations**
+- `button-pop` — vertical pop on button click (0.2s)
+- `flip` / `flip-back` — 3D card flip (1s)
+
+---
+
+## Authentication & Sessions
+
+- On login, `token`, `user`, and `tokenExpiry` are stored in `localStorage`
+- Session duration: **1 hours**
+- Admin routes are protected by the `AdminRoute` component (checks `is_admin` flag)
+- Redirects to `/login` if session is expired or unauthorized
+
+---
+
+## Getting Started
+
+### 1. Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
 PORT=3001
 REACT_APP_API_URL=http://localhost:3000
 ```
 
-## Available Scripts
+### 2. Install & Run
 
-In the project directory, you can run:
+```bash
+# Install dependencies
+npm install
 
-### `npm start`
+# Start development server (port 3001)
+npm start
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Production build
+npm run build
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Run tests
+npm test
+```
 
-### `npm test`
+> The backend API server must be running before starting the app (default: `http://localhost:3000`).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## API Endpoints
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/login` | Login |
+| `POST` | `/api/user/signup` | Sign up |
+| `GET` | `/api/admin-cards` | Fetch admin cards |
+| `GET` | `/api/retrieve-all-projects` | Fetch all projects |
+| `GET` | `/api/retrieve-all-photos` | Fetch all photos |
+| `GET` | `/api/events?start=&end=` | Fetch events by date range |
+| `POST` | `/api/attendance` | Record attendance |
+| `GET` | `/api/qr-create?meeting_number=` | Create QR record |
+| `GET` | `/api/adminpage/members_list` | Member list (admin) |
+| `POST` | `/api/photos/upload` | Upload photo |
+| `PUT` | `/api/photos/update` | Update photo metadata |
+| `DELETE` | `/api/photos/delete` | Delete photo |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Troubleshooting Git
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-
-### Git 오류 날 경우 문제 해결을 위한 코드
+```bash
 git pull origin main --rebase
-git push origin main 
+git push origin main
+```
