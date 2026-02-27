@@ -17,3 +17,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* react-big-calendar toolbar: reorder nav buttons to < Today > */
+.rbc-toolbar .rbc-btn-group:first-child {
+  display: flex;
+}
+.rbc-toolbar .rbc-btn-group:first-child button:nth-child(1) {
+  order: 2; /* Today → 가운데 */
+}
+.rbc-toolbar .rbc-btn-group:first-child button:nth-child(2) {
+  order: 1; /* Back (<) → 왼쪽 */
+}
+.rbc-toolbar .rbc-btn-group:first-child button:nth-child(3) {
+  order: 3; /* Next (>) → 오른쪽 */
+}

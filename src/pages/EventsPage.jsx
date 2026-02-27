@@ -153,8 +153,8 @@ function EventsPage() {
               onView={(view) => setCurrentView(view)}
               culture="en-US"
               messages={{
-                next: 'Next',
-                previous: 'Back',
+                next: '>',
+                previous: '<',
                 today: 'Today',
                 month: 'Month',
                 week: 'Week',
