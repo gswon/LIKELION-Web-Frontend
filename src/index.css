@@ -20,14 +20,52 @@ code {
 
 /* react-big-calendar toolbar: reorder nav buttons to < Today > */
 .rbc-toolbar .rbc-btn-group:first-child {
-  display: flex;
+  display: flex !important;
+  gap: 6px !important;
 }
+
 .rbc-toolbar .rbc-btn-group:first-child button:nth-child(1) {
-  order: 2; /* Today → 가운데 */
+  order: 2;
+  /* Today → 가운데 */
 }
+
 .rbc-toolbar .rbc-btn-group:first-child button:nth-child(2) {
-  order: 1; /* Back (<) → 왼쪽 */
+  order: 1;
+  /* Back (<) → 왼쪽 */
 }
+
 .rbc-toolbar .rbc-btn-group:first-child button:nth-child(3) {
-  order: 3; /* Next (>) → 오른쪽 */
+  order: 3;
+  /* Next (>) → 오른쪽 */
+}
+
+/* 3개 버튼 동일한 박스 + 정중앙 정렬 (기본 스타일 완전 override) */
+.rbc-toolbar .rbc-btn-group:first-child button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 60px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.rbc-toolbar .rbc-btn-group:first-child button:hover {
+  background: #f3f4f6 !important;
+  border-color: #9ca3af !important;
+}
+
+.rbc-toolbar .rbc-btn-group:first-child button.rbc-active {
+  background: #f3f4f6 !important;
+  border-color: #9ca3af !important;
 }
