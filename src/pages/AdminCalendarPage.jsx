@@ -16,12 +16,12 @@ const localizer = dateFnsLocalizer({
 });
 
 const eventCategories = {
-  'Ideathon':       { color: '#FF6000', bgColor: '#FFF4ED' },
-  'Project Meeting':{ color: '#57068c', bgColor: '#F3E8FF' },
-  'Study':          { color: '#059669', bgColor: '#D1FAE5' },
-  'GM':             { color: '#DC2626', bgColor: '#FEE2E2' },
-  'Team Dinner':    { color: '#2563EB', bgColor: '#DBEAFE' },
-  'Session':        { color: '#9333EA', bgColor: '#F3E8FF' },
+  'Ideathon': { color: '#FF6000', bgColor: '#FFF4ED' },
+  'Project Meeting': { color: '#57068c', bgColor: '#F3E8FF' },
+  'Study': { color: '#059669', bgColor: '#D1FAE5' },
+  'GM': { color: '#DC2626', bgColor: '#FEE2E2' },
+  'Team Dinner': { color: '#2563EB', bgColor: '#DBEAFE' },
+  'Session': { color: '#9333EA', bgColor: '#F3E8FF' },
 };
 
 function AdminCalendarPage() {
@@ -259,8 +259,8 @@ function AdminCalendarPage() {
               onView={(view) => setCurrentView(view)}
               culture="en-US"
               messages={{
-                next: 'Next',
-                previous: 'Back',
+                next: '>',
+                previous: '<',
                 today: 'Today',
                 month: 'Month',
                 week: 'Week',
