@@ -26,7 +26,7 @@ export default function LoginPage() {
       });
       if (res.ok) {
         setResendMessage('Verification email sent! Please check your inbox.');
-      } else if (response.status === 400) {
+      } else if (res.status === 400) {
         setMessage('Please wait for more than 30 seconds and try again');
       } else {
         const data = await res.json().catch(() => ({}));
